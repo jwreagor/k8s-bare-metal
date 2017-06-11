@@ -1,6 +1,6 @@
 # generate ./ssh.cfg for ansible usage
 data "template_file" "ssh_cfg" {
-    template = "${file("${path.module}/template/ssh.cfg")}"
+    template = "${file("${path.module}/templates/ssh.cfg")}"
     depends_on = [
       "triton_machine.etcd",
       "triton_machine.apiserver",

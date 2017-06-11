@@ -1,6 +1,6 @@
 # Generate certificates
 data "template_file" "certificates" {
-    template = "${file("${path.module}/template/kubernetes-csr.json")}"
+    template = "${file("${path.module}/templates/kubernetes-csr.json")}"
     depends_on = [
       "triton_machine.etcd",
       "triton_machine.apiserver",
