@@ -1,12 +1,10 @@
 TFSTATE_FILE ?= .terraform.state
 TFVARS_FILE ?= .terraform.vars
 TF_PLAN ?= .terraform.plan
-
 TERRAFORM=$(shell which 2>&1 /dev/null terraform | head -1)
+PACKER=$(shell which 2>&1 /dev/null packer | head -1)
 
-IMAGE_NAME ?= my-freebsd-image
-IMAGE_VERSION ?= 1.0.0
-TEMPLATE ?= freebsd.json
+TEMPLATES ?= kvm-edge-worker.json kvm-worker.json lx-bastion.json lx-controller.json lx-etcd.json
 
 .SUFFIXES: .json .json5
 
@@ -20,6 +18,16 @@ TEMPLATE ?= freebsd.json
 #      these values.  https://www.npmjs.com/package/triton
 
 default: help
+
+# Packer Targets
+
+%.json: %.json5
+	cfgt -i $< -o $@
+
+build:: $(TEMPLATES) ## Build our Triton images
+	@for template in $+; do \
+		$(PACKER) build $$template; \
+	done
 
 # Terraform Targets
 
@@ -41,32 +49,18 @@ show: ## Show the Terraform state
 taint: ## Taints a given resource
 	$(TERRAFORM) taint -state=${TFSTATE_FILE} $(TARGET)
 
-# Packer Targets
-
-%.json: %.json5
-	cfgt -i $< -o $@
-
-build:: $(TEMPLATES) ## Build our Triton images
-	packer build \
-		-var "image_name=$(IMAGE_NAME)" \
-		-var "image_version=$(IMAGE_VERSION)" \
-		$(EXTRA_ARGS) \
-		$(TEMPLATE)
-
-build/kvm-edge-worker::
-
 # Triton Targets
 
-images-lx:: ## Show all Ubuntu images on Triton
+list-lx:: ## Show all Ubuntu images on Triton
 	triton images -l name=~ubuntu type=lx-dataset
 
-images-kvm:: ## Show all Ubuntu images on Triton
+list-kvm:: ## Show all Ubuntu images on Triton
 	triton images -l name=~ubuntu type=zvol
 
 instances:: ## Show all running instances on Triton
 	triton instances -o name,ips,id
 
-my-images:: ## Show my Triton images
+custom-images:: ## Show my Triton images
 	triton images -l public=false
 
 networks::  ## Show Triton networks
@@ -76,7 +70,15 @@ packages::  ## Show Triton Packages
 	triton packages
 
 # Misc Targets
-cfgt:: ## Install cfgt(1)
+deps:: deps/terraform deps/packer deps/cfgt ## Install all dependencies
+
+deps/terraform:: ## Install terraform(1)
+	go get -u github.com/hashicorp/terraform
+
+deps/packer:: ## Install packer(1)
+	go get -u github.com/hashicorp/packer
+
+deps/cfgt:: ## Install cfgt(1)
 	go get -u github.com/sean-/cfgt
 
 env:: ## Show local environment variables
