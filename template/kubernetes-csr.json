@@ -1,0 +1,26 @@
+{
+  "CN": "kubernetes",
+  "hosts": [
+    "worker0",
+    "${apiserver0_ip}",
+    "${scheduler0_ip}",
+    "${controller_manager0_ip}",
+    "${etcd0_ip}",
+    "${etcd1_ip}",
+    "${etcd2_ip}",
+    "${worker0_ip}",
+    "127.0.0.1"
+  ],
+  "key": {
+    "algo": "rsa",
+    "size": 2048
+  },
+  "names": [
+    {
+      "C": "UK",
+      "L": "London",
+      "O": "OpenCredo",
+      "OU": "Cluster"
+    }
+  ]
+}

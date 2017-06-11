@@ -1,0 +1,60 @@
+// This Packer Template requires JSON5 support in packer(1) or the cfgt(1)
+// utility.
+//
+// USAGE with unpatched packer: cfgt -i freebsd.json5 | packer build -
+// USAGE with patched packer: packer build freebsd.json5
+//
+// packer w/ JSON5 support: https://github.com/sean-/packer/tree/f-json5
+// cfgt: go get -u github.com/sean-/cfgt
+{
+  variables: {
+    // Environment variables pulled from `triton env` or `triton env $(PROFILE_NAME)`
+    triton_account: "{{ env `SDC_ACCOUNT` }}",
+    triton_key_id: "{{ env `SDC_KEY_ID` }}",
+    triton_key_path: "{{ env `SDC_KEY_PATH` }}",
+    triton_url: "{{ env `SDC_URL` }}",
+    image_name: "k8s-bastion-lx-16.04",
+    image_version: "1.0.0",
+  },
+
+  builders: [
+    {
+      type: "triton",
+
+      triton_url: "{{ user `triton_url` }}",
+      triton_account: "{{ user `triton_account` }}",
+      triton_key_id: "{{ user `triton_key_id` }}",
+      triton_key_material: "{{ user `triton_key_path` }}",
+
+      source_machine_name: "k8s-bastion-lx-builder",
+      source_machine_package: "g4-highcpu-512M",
+      source_machine_image: "7b5981c4-1889-11e7-b4c5-3f3bdfc9b88b",
+
+      // Both the private and public networks
+      source_machine_networks: [
+        "f7ed95d3-faaf-43ef-9346-15644403b963",
+        "0aa8f3f0-dddf-4449-ae4c-1289d60f33f9",
+      ],
+
+      ssh_username: "root",
+      ssh_private_key_file: "{{ user `triton_key_path` }}",
+
+      image_name: "{{ user `image_name` }}",
+      image_version: "{{ user `image_version` }}",
+    },
+  ],
+
+  provisioners: [
+    { // Clean up the base Ubuntu image
+      type: "shell",
+      inline: [
+        // Log the version of the builder image
+        "uname -a",
+        // Update packaging
+        "apt-get update",
+        // Additional packages for management
+        "apt-get install -y bash tmux",
+      ],
+    },
+  ],
+}

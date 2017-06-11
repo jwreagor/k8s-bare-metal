@@ -1,0 +1,4 @@
+.terraform.state
+.terraform.vars
+.terraform.plan
+*.tfvars
