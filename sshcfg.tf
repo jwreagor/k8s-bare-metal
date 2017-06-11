@@ -10,7 +10,7 @@ data "template_file" "ssh_cfg" {
       "triton_machine.bastion"
     ]
     vars {
-      user = "${var.default_instance_user}"
+      user = "${var.default_user}"
 
       etcd0_ip = "${triton_machine.etcd.0.primaryip}"
       etcd1_ip = "${triton_machine.etcd.1.primaryip}"
