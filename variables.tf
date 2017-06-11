@@ -14,31 +14,19 @@ variable triton_key_path {
   description = "Path to the SSH private key used by triton"
 }
 
-variable control_cidr {
-  description = "CIDR for maintenance: inbound traffic will be allowed from this IPs"
-}
-
-variable default_ssh_public_key {
+variable bastion_public_key {
   description = "Public SSH key for the private key used across all nodes"
 }
 
-variable default_ssh_key {
-  description = "Key name of the SSH key used across all nodes"
-  default = "id_rsa"
-}
-
-# NOTE: IF YOU CHANGE THIS YOU HAVE TO CHANGE instance_filters =
-# tag:ansibleFilter=Kubernetes01 in ./ansible/hosts/ec2.ini
+# NOTE: IF YOU CHANGE THIS YOU HAVE TO CHANGE
+# instance_filters = tag:ansibleFilter=Kubernetes01 in ./ansible/hosts/ec2.ini
 variable ansibleFilter {
   description = "`ansibleFilter` tag added to all nodes, enables instance filtering by ansible inventory"
   default = "Kubernetes01"
 }
 
-variable kubernetes_pod_cidr {
-  default = "10.20.0.0/24"
-}
-
-variable default_instance_user {
+variable default_user {
+  description = "Default user account typically used to SSH into each machine"
   default = "ubuntu"
 }
 
