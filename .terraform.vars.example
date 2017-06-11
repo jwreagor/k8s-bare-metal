@@ -1,0 +1,6 @@
+/* Required variables */
+triton_account = "< env SDC_ACCOUNT >"
+triton_key_id = "< env SDC_KEY_ID >"
+triton_url = "< env SDC_URL >"
+triton_key_path = "< path to the private key mentioned above >"
+bastion_public_key = "< public SSH key for bastion >"
