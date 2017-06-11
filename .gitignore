@@ -2,3 +2,4 @@
 .terraform.vars
 .terraform.plan
 *.tfvars
+*.json
