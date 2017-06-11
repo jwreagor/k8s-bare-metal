@@ -49,10 +49,8 @@
       inline: [
         // Log the version of the builder image
         "uname -a",
-
         // Update packaging
         "apt-get update",
-
         // Additional packages for management
         "apt-get install -y bash tmux",
       ],
