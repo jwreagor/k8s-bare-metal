@@ -52,7 +52,10 @@
         // Update packaging
         "apt-get update",
         // Additional packages for management
-        "apt-get install -y bash tmux",
+        "apt-get install -y bash tmux wget curl jq ca-certificates",
+        // Install Docker 1.12.1
+        "wget --no-verbose https://get.docker.com/builds/Linux/x86_64/docker-1.12.1.tgz && tar -xvf docker-1.12.1.tgz && cp docker/docker* /usr/bin/",
+
       ],
     },
   ],
