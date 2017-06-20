@@ -35,8 +35,12 @@
         "0aa8f3f0-dddf-4449-ae4c-1289d60f33f9",
       ],
 
-      ssh_username: "ubuntu",
+      ssh_username: "root",
       ssh_private_key_file: "{{ user `triton_key_path` }}",
+
+      ssh_bastion_host: "fubarnetes",
+      ssh_bastion_username: "ubuntu",
+      ssh_bastion_private_key_file: "{{ user `triton_key_path` }}",
 
       image_name: "{{ user `image_name` }}",
       image_version: "{{ user `image_version` }}",
@@ -50,11 +54,11 @@
         // Log the version of the builder image
         "uname -a",
         // Update packaging
-        "sudo apt-get update",
+        "apt-get update",
         // Additional packages for management
-        "sudo apt-get install -y bash tmux wget curl jq ca-certificates",
+        "apt-get install -y bash tmux wget curl jq ca-certificates",
         // Install Docker 1.12.1
-        "sudo wget --no-verbose https://get.docker.com/builds/Linux/x86_64/docker-1.12.1.tgz && sudo tar -xvf docker-1.12.1.tgz && sudo cp docker/docker* /usr/bin/",
+        "wget --no-verbose https://get.docker.com/builds/Linux/x86_64/docker-1.12.1.tgz && tar -xvf docker-1.12.1.tgz && cp docker/docker* /usr/bin/",
         // Install kubelet
 
       ],
