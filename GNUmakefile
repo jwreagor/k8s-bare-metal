@@ -22,12 +22,22 @@ default: help
 # Packer Targets
 
 %.json: %.json5
+	rm $@
 	cfgt -i $< -o $@
 
 build:: $(TEMPLATES) ## Build our Triton images
 	@for template in $+; do \
 		$(PACKER) build $$template; \
 	done
+
+build/worker: clean kvm-worker.json
+	$(PACKER) build kvm-worker.json
+
+build/bastion: lx-bastion.json
+	$(PACKER) build lx-bastion.json
+
+build/etcd: lx-etcd.json
+	$(PACKER) build lx-etcd.json
 
 # Terraform Targets
 
