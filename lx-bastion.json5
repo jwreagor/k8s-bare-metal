@@ -36,7 +36,7 @@
         "0aa8f3f0-dddf-4449-ae4c-1289d60f33f9",
       ],
 
-      ssh_username: "ubuntu",
+      ssh_username: "root",
       ssh_private_key_file: "{{ user `triton_key_path` }}",
 
       image_name: "{{ user `image_name` }}",
@@ -51,9 +51,9 @@
         // Log the version of the builder image
         "uname -a",
         // Update packaging
-        "sudo apt-get update",
+        "apt-get update",
         // Additional packages for management
-        "sudo apt-get install -y bash tmux",
+        "apt-get install -y bash tmux",
       ],
     },
   ],
