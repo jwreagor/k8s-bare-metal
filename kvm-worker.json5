@@ -13,6 +13,7 @@
     triton_key_id: "{{ env `SDC_KEY_ID` }}",
     triton_key_path: "{{ env `SDC_KEY_PATH` }}",
     triton_url: "{{ env `SDC_URL` }}",
+    triton_bastion_host: "{{ env `BASTION_HOST` }}",
     image_name: "k8s-worker-kvm-16.04",
     image_version: "1.0.0",
   },
@@ -35,11 +36,10 @@
         "0aa8f3f0-dddf-4449-ae4c-1289d60f33f9",
       ],
 
-      ssh_username: "root",
+      ssh_username: "ubuntu",
       ssh_private_key_file: "{{ user `triton_key_path` }}",
-
-      ssh_bastion_host: "fubarnetes",
-      ssh_bastion_username: "ubuntu",
+      ssh_bastion_username: "root",
+      ssh_bastion_host: "{{ user `triton_bastion_host` }}",
       ssh_bastion_private_key_file: "{{ user `triton_key_path` }}",
 
       image_name: "{{ user `image_name` }}",
@@ -54,13 +54,15 @@
         // Log the version of the builder image
         "uname -a",
         // Update packaging
-        "apt-get update",
+        "sudo apt-get update",
         // Additional packages for management
-        "apt-get install -y bash tmux wget curl jq ca-certificates",
+        "sudo apt-get install -y bash tmux wget curl jq ca-certificates",
         // Install Docker 1.12.1
-        "wget --no-verbose https://get.docker.com/builds/Linux/x86_64/docker-1.12.1.tgz && tar -xvf docker-1.12.1.tgz && cp docker/docker* /usr/bin/",
-        // Install kubelet
-
+        "sudo wget --no-verbose https://get.docker.com/builds/Linux/x86_64/docker-1.12.1.tgz && sudo tar -xvf docker-1.12.1.tgz && sudo cp docker/docker* /usr/bin/",
+        // Install CNI plugins
+        "sudo mkdir -p /opt/cni && sudo wget --no-verbose https://storage.googleapis.com/kubernetes-release/network-plugins/cni-07a8a28637e97b22eb8dfe710eeae1344f69d16e.tar.gz && sudo tar -xvf cni-07a8a28637e97b22eb8dfe710eeae1344f69d16e.tar.gz -C /opt/cni",
+        // Install Kubernetes worker binaries
+        "for bin in kubectl kube-proxy kubelet; do sudo wget --no-verbose -P /usr/bin https://storage.googleapis.com/kubernetes-release/release/v1.5.6/bin/linux/amd64/$bin && sudo chmod +x /usr/bin/$bin; done",
       ],
     },
   ],
