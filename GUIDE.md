@@ -16,8 +16,7 @@ the Hard Way post, but with extended Triton exclusive features.
 ## Setup
 
 * Spin-up `etcd` Autopilot Pattern cluster (within our private network).
-* In the Triton dashboard, create a private Fabric network with the following setup.
-* Edit each template and add the network UUID you create below.
+* In the Triton dashboard, create a private fabric network with the following setup.
 
 ```json
 {
@@ -37,14 +36,18 @@ the Hard Way post, but with extended Triton exclusive features.
     "vlan_id": 2
 }
 ```
+* Edit each template and add the network UUID you've created below.
 
 ## Usage
 
 1. Run `make build/bastion` to build a bastion image.
 2. `triton create --wait --name=fubarnetes --network=Joyent-SDC-Public,fubarnetes -m user-data="hostname=fubarnetes" k8s-bastion-lx-16.04 14ad9d54`
 3. Grab the IP address of your bastion instance and set to `export BASTION_HOST` env var.
-4. Use bastion instance to build remaining images on the private network.
-5. ... more to go ...
+4. Use bastion instance to build remaining images for your private fabric network.
+5. Run `make build/controller build/edge build/worker`
+6. Create input variables for Terraform.
+7. Configure infrastructure using Terraform `terraform plan`
+8. `terraform apply`
 
 ## Notes
 
