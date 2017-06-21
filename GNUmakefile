@@ -86,7 +86,7 @@ packages::  ## Show Triton Packages
 	triton packages
 
 # Misc Targets
-deps:: deps/terraform deps/packer deps/cfgt ## Install all dependencies
+deps:: deps/terraform deps/packer deps/cfgt ## Install all local dependencies
 
 deps/terraform:: ## Install terraform(1)
 	go get -u github.com/hashicorp/terraform
@@ -98,7 +98,7 @@ deps/cfgt:: ## Install cfgt(1)
 	go get -u github.com/sean-/cfgt
 
 env:: ## Show local environment variables
-	@env | egrep -i '(SDC|Triton|Manta)' | sort
+	@env | egrep -i '(SDC|Triton|Manta|BASTION|PRIVATE|PUBLIC)' | sort
 
 .PHONY: help
 help:
