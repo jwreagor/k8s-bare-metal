@@ -33,6 +33,9 @@ build:: $(TEMPLATES) ## Build our Triton images
 build/controller: lx-controller.json
 	$(PACKER) build lx-controller.json
 
+build/edge: kvm-edge-worker.json
+	$(PACKER) build kvm-edge-worker.json
+
 build/worker: kvm-worker.json
 	$(PACKER) build kvm-worker.json
 
