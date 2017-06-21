@@ -22,7 +22,7 @@ default: help
 # Packer Targets
 
 %.json: %.json5
-	rm $@
+	rm -f $@
 	cfgt -i $< -o $@
 
 build:: $(TEMPLATES) ## Build our Triton images
@@ -30,7 +30,10 @@ build:: $(TEMPLATES) ## Build our Triton images
 		$(PACKER) build $$template; \
 	done
 
-build/worker: clean kvm-worker.json
+build/controller: lx-controller.json
+	$(PACKER) build lx-controller.json
+
+build/worker: kvm-worker.json
 	$(PACKER) build kvm-worker.json
 
 build/bastion: lx-bastion.json
