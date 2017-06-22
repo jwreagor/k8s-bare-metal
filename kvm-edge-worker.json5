@@ -14,6 +14,8 @@
     triton_key_path: "{{ env `SDC_KEY_PATH` }}",
     triton_url: "{{ env `SDC_URL` }}",
     triton_bastion_host: "{{ env `BASTION_HOST` }}",
+    triton_public_network: "{{ env `PUBLIC_NETWORK` }}",
+    triton_private_network: "{{ env `PRIVATE_NETWORK` }}",
     image_name: "k8s-edge-kvm-16.04",
     image_version: "1.0.0",
   },
@@ -33,10 +35,11 @@
 
       // Private network for control plane only
       source_machine_networks: [
-        "f7ed95d3-faaf-43ef-9346-15644403b963",
-        "0aa8f3f0-dddf-4449-ae4c-1289d60f33f9",
+        "{{ user `triton_public_network` }}",
+        "{{ user `triton_private_network` }}",
       ],
 
+      // `ubuntu` user for ubuntu certified images
       ssh_username: "ubuntu",
       ssh_private_key_file: "{{ user `triton_key_path` }}",
       ssh_bastion_username: "root",

@@ -13,6 +13,8 @@
     triton_key_id: "{{ env `SDC_KEY_ID` }}",
     triton_key_path: "{{ env `SDC_KEY_PATH` }}",
     triton_url: "{{ env `SDC_URL` }}",
+    triton_bastion_host: "{{ env `BASTION_HOST` }}",
+    triton_private_network: "{{ env `PRIVATE_NETWORK` }}",
     image_name: "k8s-etcd-lx-16.04",
     image_version: "1.0.0",
   },
@@ -32,11 +34,15 @@
 
       // Private network for control plane only
       source_machine_networks: [
-        "0aa8f3f0-dddf-4449-ae4c-1289d60f33f9",
+        "{{ user `triton_private_network` }}",
       ],
 
-      ssh_username: "ubuntu",
+      // `root` user for Joyent ubuntu images
+      ssh_username: "root",
       ssh_private_key_file: "{{ user `triton_key_path` }}",
+      ssh_bastion_username: "root",
+      ssh_bastion_host: "{{ user `triton_bastion_host` }}",
+      ssh_bastion_private_key_file: "{{ user `triton_key_path` }}",
 
       image_name: "{{ user `image_name` }}",
       image_version: "{{ user `image_version` }}",

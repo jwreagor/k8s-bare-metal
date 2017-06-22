@@ -13,6 +13,8 @@
     triton_key_id: "{{ env `SDC_KEY_ID` }}",
     triton_key_path: "{{ env `SDC_KEY_PATH` }}",
     triton_url: "{{ env `SDC_URL` }}",
+    triton_public_network: "{{ env `PUBLIC_NETWORK` }}",
+    triton_private_network: "{{ env `PRIVATE_NETWORK` }}",
     image_name: "k8s-bastion-lx-16.04",
     image_version: "1.0.0",
   },
@@ -32,10 +34,11 @@
 
       // Both the private and public networks
       source_machine_networks: [
-        "f7ed95d3-faaf-43ef-9346-15644403b963",
-        "0aa8f3f0-dddf-4449-ae4c-1289d60f33f9",
+        "{{ user `triton_public_network` }}",
+        "{{ user `triton_private_network` }}",
       ],
 
+      // `root` user for Joyent ubuntu images
       ssh_username: "root",
       ssh_private_key_file: "{{ user `triton_key_path` }}",
 
