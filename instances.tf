@@ -1,3 +1,23 @@
+resource "triton_machine" "bastion" {
+  count = 1
+  name = "bastion${format("%02d", count.index)}"
+
+  package = "${var.bastion_package}"
+  image = "${var.bastion_image}"
+
+  nic {
+    network = "${var.public_network}"
+  }
+
+  nic {
+    network = "${var.private_network}"
+  }
+
+  tags {
+    hostname = "bastion${format("%02d", count.index)}"
+  }
+}
+
 resource "triton_machine" "controller" {
   count = 1
   name  = "controller${format("%02d", count.index)}"
@@ -50,6 +70,10 @@ resource "triton_machine" "edge_worker" {
 }
 
 // -----------------------------------------------------------------------------
+
+output "kubernetes_bastion_ip" {
+  value = "${join(",", triton_machine.bastion.0.ips)}"
+}
 
 output "kubernetes_controller_ips" {
   value = "${join(",", triton_machine.controller.*.ips)}"
