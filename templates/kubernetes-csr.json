@@ -1,14 +1,10 @@
 {
   "CN": "kubernetes",
   "hosts": [
-    "worker0",
-    "${apiserver0_ip}",
-    "${scheduler0_ip}",
-    "${controller_manager0_ip}",
-    "${etcd0_ip}",
-    "${etcd1_ip}",
-    "${etcd2_ip}",
-    "${worker0_ip}",
+    ${etcd_ips},
+    ${worker_ips},
+    ${edge_worker_ips},
+    ${controller_ips},
     "127.0.0.1"
   ],
   "key": {

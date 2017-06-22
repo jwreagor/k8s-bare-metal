@@ -4,3 +4,6 @@
 *.tfvars
 *.json
 *.state.backup
+cert/*.pem
+cert/*.csr
+cert/kubernetes-csr.json
