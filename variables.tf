@@ -18,11 +18,11 @@ variable bastion_public_key {
   description = "Public SSH key for the private key used across all nodes"
 }
 
-variable private_network_id {
+variable private_network {
   description = "The UUID of a private fabric network"
 }
 
-variable public_network_id {
+variable public_network {
   description = "The UUID of a public fabric network"
 }
 
@@ -32,27 +32,42 @@ variable default_user {
 }
 
 variable controller_package {
+  description = "Package which defines the compute attributes of a controller"
   default = "g4-highcpu-512M"
+}
+
+variable worker_package {
+  description = "Package which defines the compute attributes of a worker"
+  default = "k4-highcpu-kvm-1.75G"
+}
+
+variable edge_worker_package {
+  description = "Package which defines the compute attributes of an edge worker"
+  default = "k4-highcpu-kvm-1.75G"
 }
 
 variable controller_image {
   description = "The UUID of your k8s-controller-lx-16.04 image"
 }
 
-variable worker_package {
-  default = "k4-highcpu-kvm-1.75G"
-}
-
 variable worker_image {
   description = "The UUID of your k8s-worker-kvm-16.04 image"
 }
 
-variable edge_worker_package {
-  default = "k4-highcpu-kvm-1.75G"
-}
-
 variable edge_worker_image {
   description = "The UUID of your k8s-worker-kvm-16.04 image"
+}
+
+variable etcd1_ip {
+  description = "IP address of your etcd cluster node 1"
+}
+
+variable etcd2_ip {
+  description = "IP address of your etcd cluster node 2"
+}
+
+variable etcd3_ip {
+  description = "IP address of your etcd cluster node 3"
 }
 
 # variable bastion_package {
