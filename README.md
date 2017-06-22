@@ -80,10 +80,10 @@ $ triton-docker inspect $(triton-docker ps --format "{{.Names}}" --filter 'name=
 
 ## Create Kubernetes images using Packer
 
-We'll first create a bastion for securely building our images then build an
-image for each portion of our Kubernetes cluster.
+We'll first create a bastion for securing our build environment, then build an
+image for each part of our Kubernetes cluster.
 
-1. Run `make build/bastion` to build a bastionimage.
+1. Run `make build/bastion` to build a bastion image.
 1. `triton create --wait --name=fubarnetes --network=Joyent-SDC-Public,fubarnetes -m user-data="hostname=fubarnetes" k8s-bastion-lx-16.04 14ad9d54`
 1. Grab the IP address of your bastion instance and set to `export BASTION_HOST` env var.
 1. Use bastion instance to build remaining images on your private fabric network.
@@ -91,9 +91,21 @@ image for each portion of our Kubernetes cluster.
 
 ## Provision infrastructure using Terraform
 
-1. Create input variables for Terraform within `.terraform.vars`.
+1. Create input variables for Terraform within `.terraform.vars` by copying the
+   sample `.terraform.vars.example` file.
 1. Configure infrastructure using Terraform `terraform plan`
 1. `terraform apply`
+
+## Upload assets and restart the cluster
+
+After we've created our infrastructure we're left with a few files that need to
+be uploaded to our nodes. We'll use a simple shell script to upload them then
+restart cluster services. We do this through the bastion instance.
+
+Since the configuration files and TLS certs are automatically generated, there's
+nothing to do but run scp.
+
+...
 
 ## Notes
 
