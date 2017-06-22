@@ -19,6 +19,9 @@ TEMPLATES ?= kvm-edge-worker.json kvm-worker.json lx-bastion.json lx-controller.
 
 default: help
 
+clean: ## Clear out generated/compiled templates and artifacts.
+	rm -f *.json cert/*.pem cert/*.csr cert/kubernetes-csr.json
+
 # Packer Targets
 
 %.json: %.json5
