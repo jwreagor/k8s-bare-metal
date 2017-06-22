@@ -1,6 +1,6 @@
 [Unit]
 Description=Kubernetes Scheduler
-Documentation=https://github.com/GoogleCloudPlatform/kubernetes
+Documentation=https://github.com/kubernetes/kubernetes
 
 [Service]
 ExecStart=/usr/local/sbin/start-kube-scheduler.sh
