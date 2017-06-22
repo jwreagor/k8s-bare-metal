@@ -1,14 +1,5 @@
-// This Packer Template requires JSON5 support in packer(1) or the cfgt(1)
-// utility.
-//
-// USAGE with unpatched packer: cfgt -i kvm-worker.json5 | packer build -
-// USAGE with patched packer: packer build kvm-worker.json5
-//
-// packer w/ JSON5 support: https://github.com/sean-/packer/tree/f-json5
-// cfgt: go get -u github.com/sean-/cfgt
 {
   variables: {
-    // Environment variables pulled from `triton env` or `triton env $(PROFILE_NAME)`
     triton_account: "{{ env `SDC_ACCOUNT` }}",
     triton_key_id: "{{ env `SDC_KEY_ID` }}",
     triton_key_path: "{{ env `SDC_KEY_PATH` }}",
@@ -69,7 +60,7 @@
     },
     {
       type: "file",
-      source: "scripts/units/docker.service",
+      source: "templates/docker.service",
       destination: "/home/ubuntu/docker.service",
     },
     {

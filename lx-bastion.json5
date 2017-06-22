@@ -1,14 +1,5 @@
-// This Packer Template requires JSON5 support in packer(1) or the cfgt(1)
-// utility.
-//
-// USAGE with unpatched packer: cfgt -i freebsd.json5 | packer build -
-// USAGE with patched packer: packer build freebsd.json5
-//
-// packer w/ JSON5 support: https://github.com/sean-/packer/tree/f-json5
-// cfgt: go get -u github.com/sean-/cfgt
 {
   variables: {
-    // Environment variables pulled from `triton env` or `triton env $(PROFILE_NAME)`
     triton_account: "{{ env `SDC_ACCOUNT` }}",
     triton_key_id: "{{ env `SDC_KEY_ID` }}",
     triton_key_path: "{{ env `SDC_KEY_PATH` }}",
@@ -57,6 +48,8 @@
         "apt-get update",
         // Additional packages for management
         "apt-get install -y bash tmux",
+        // Install kubelet
+        "sudo wget --no-verbose -P /usr/bin https://storage.googleapis.com/kubernetes-release/release/v1.5.6/bin/linux/amd64/kubectl && sudo chmod +x /usr/bin/kubectl",
       ],
     },
   ],

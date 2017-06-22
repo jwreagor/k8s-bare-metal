@@ -1,11 +1,3 @@
-// This Packer Template requires JSON5 support in packer(1) or the cfgt(1)
-// utility.
-//
-// USAGE with unpatched packer: cfgt -i kvm-edge-worker.json5 | packer build -
-// USAGE with patched packer: packer build kvm-edge-worker.json5
-//
-// packer w/ JSON5 support: https://github.com/sean-/packer/tree/f-json5
-// cfgt: go get -u github.com/sean-/cfgt
 {
   variables: {
     // Environment variables pulled from `triton env` or `triton env $(PROFILE_NAME)`
@@ -72,7 +64,7 @@
     },
     {
       type: "file",
-      source: "scripts/units/docker.service",
+      source: "templates/docker.service",
       destination: "/home/ubuntu/docker.service",
     },
     {
