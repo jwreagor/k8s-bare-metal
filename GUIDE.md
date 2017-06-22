@@ -10,7 +10,7 @@ the Hard Way post but with extended Triton exclusive features.
 - 1x `worker` running KVM for `kubelet`, `kube-proxy`, and `docker`.
 - 1x `edge worker` running KVM for `kubelet`, `kube-proxy`, and `docker`.
 - 1x `bastion` node for bridging into the private network.
-- `etcd` cluster using the Autopilot Pattern
+- `etcd` cluster provided by the Autopilot Pattern
 - Ignore TLS requirement for the moment...
 
 ## Create a private fabric network
@@ -53,6 +53,12 @@ private etcd cluster for our Kubernetes services.
 * `git clone git@github.com:autopilotpattern/etcd.git && cd etcd` and run
   `./start.sh`
 * Your cluster should bootstrap on its own.
+* Note your cluster IP addresses, I use the following rather obtuse line of
+  shell.
+
+```sh
+$ triton-docker inspect $(triton-docker ps --format "{{.Names}}" --filter 'name=e_etcd') | jq -r '.[].NetworkSettings.IPAddress'
+```
 
 ## Create your Kubernetes images using Packer
 
