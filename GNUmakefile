@@ -31,19 +31,19 @@ build:: $(TEMPLATES) ## Build our Triton images
 	done
 
 build/controller: lx-controller.json
-	$(PACKER) build lx-controller.json
+	$(PACKER) build $<
 
 build/edge: kvm-edge-worker.json
-	$(PACKER) build kvm-edge-worker.json
+	$(PACKER) build $<
 
 build/worker: kvm-worker.json
-	$(PACKER) build kvm-worker.json
+	$(PACKER) build $<
 
 build/bastion: lx-bastion.json
-	$(PACKER) build lx-bastion.json
+	$(PACKER) build $<
 
 build/etcd: lx-etcd.json
-	$(PACKER) build lx-etcd.json
+	$(PACKER) build $<
 
 # Terraform Targets
 
@@ -68,10 +68,13 @@ taint: ## Taints a given resource
 # Triton Targets
 
 list-lx:: ## Show all Ubuntu images on Triton
-	triton images -l name=~ubuntu type=lx-dataset
+	triton img ls name=~ubuntu type=lx-dataset
 
 list-kvm:: ## Show all Ubuntu images on Triton
-	triton images -l name=~ubuntu type=zvol
+	triton img ls name=~ubuntu type=zvol
+
+list-k8s:: ## Show custom k8s images built by this project
+	triton img ls name=~k8s
 
 instances:: ## Show all running instances on Triton
 	triton instances -o name,ips,id
