@@ -56,14 +56,11 @@ plan: ## Plan a Terraform run
 plan-target: ## Plan a Terraform run against a specific target
 	$(TERRAFORM) plan -state=${TFSTATE_FILE} -var-file=${TFVARS_FILE} -out=${TF_PLAN} -target=${TARGET}
 
-fmt: ## Format Terraform files inline
-	$(TERRAFORM) fmt
-
 show: ## Show the Terraform state
 	$(TERRAFORM) show ${TFSTATE_FILE}
 
-taint: ## Taints a given resource
-	$(TERRAFORM) taint -state=${TFSTATE_FILE} $(TARGET)
+destroy:
+	$(TERRAFORM) destroy -state=${TFSTATE_FILE} -var-file=${TFVARS_FILE}
 
 # Triton Targets
 
