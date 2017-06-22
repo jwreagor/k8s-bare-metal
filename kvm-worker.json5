@@ -67,5 +67,19 @@
         "for bin in kubectl kube-proxy kubelet; do sudo wget --no-verbose -P /usr/bin https://storage.googleapis.com/kubernetes-release/release/v1.5.6/bin/linux/amd64/$bin && sudo chmod +x /usr/bin/$bin; done",
       ],
     },
+    {
+      type: "file",
+      source: "scripts/units/docker.service",
+      destination: "/home/ubuntu/docker.service",
+    },
+    {
+      type: "shell",
+      inline: [
+        "sudo mv /home/ubuntu/docker.service /etc/systemd/system/docker.service && sudo chmod 600 /etc/systemd/system/docker.service",
+        "sudo systemctl daemon-reload",
+        "sudo systemctl enable docker",
+        "sudo systemctl start docker",
+      ],
+    },
   ],
 }

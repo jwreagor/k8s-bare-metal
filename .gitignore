@@ -3,3 +3,4 @@
 .terraform.plan
 *.tfvars
 *.json
+*.state.backup

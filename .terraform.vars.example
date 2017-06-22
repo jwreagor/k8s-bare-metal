@@ -1,6 +1,12 @@
-/* Required variables */
+/* -*-terraform-*- */
+/* Example required variables */
 triton_account = "< env SDC_ACCOUNT >"
 triton_key_id = "< env SDC_KEY_ID >"
 triton_url = "< env SDC_URL >"
 triton_key_path = "< path to the private key mentioned above >"
 bastion_public_key = "< public SSH key for bastion >"
+private_network_id = "< full UUID of your private network >"
+public_network_id = "< full UUID of your public network >"
+controller_image = "< full UUID of your controller image >"
+worker_image = "< full UUID of your worker image >"
+edge_worker_image = "< full UUID of your edge worker image >"

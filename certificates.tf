@@ -2,22 +2,16 @@
 data "template_file" "certificates" {
     template = "${file("${path.module}/templates/kubernetes-csr.json")}"
     depends_on = [
-      "triton_machine.etcd",
-      "triton_machine.apiserver",
-      "triton_machine.scheduler",
-      "triton_machine.controller_manager",
-      "triton_machine.worker"
+      "triton_machine.controller",
+      "triton_machine.worker",
+      "triton_machine.edge_worker"
     ]
 
     vars {
       # variables must be primitives, neither lists nor maps
-      etcd0_ip = "${join(",", triton_machine.etcd.0.ips)}"
-      etcd1_ip = "${join(",", triton_machine.etcd.1.ips)}"
-      etcd2_ip = "${join(",", triton_machine.etcd.2.ips)}"
-      apiserver0_ip = "${join(",", triton_machine.apiserver.0.ips)}"
-      scheduler0_ip = "${join(",", triton_machine.scheduler.0.ips)}"
-      controller_manager2_ip = "${join(",", triton_machine.controller_manager.0.ips)}"
-      worker0_ip = "${join(",", triton_machine.worker.0.ips)}"
+      controller0_ip = "${triton_machine.controller.0.primaryip}"
+      worker0_ip = "${triton_machine.worker.0.primaryip}"
+      edge_worker0_ip = "${triton_machine.edge_worker.0.primaryip}"
     }
 }
 resource "null_resource" "certificates" {
