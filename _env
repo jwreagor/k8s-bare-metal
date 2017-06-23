@@ -1,0 +1,9 @@
+# -*-sh-*-
+# Path to your SDC key file (the path to fingerprint SDC_KEY_ID)
+export SDC_KEY_PATH=
+# Your bastion host name or IP address
+export BASTION_HOST=
+# UUID of your public network
+export PUBLIC_NETWORK=
+# UUID of your private network
+export PRIVATE_NETWORK=
