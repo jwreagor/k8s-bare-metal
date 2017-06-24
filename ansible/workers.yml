@@ -1,0 +1,35 @@
+---
+- hosts: workers
+  become_user: root
+  become: true
+  remote_user: root
+  tasks:
+  - name: Make directory for Kubernetes
+    file: path=/var/lib/kubernetes state=directory
+  - name: Make directory for provider configs
+    file: path=/etc/kubernetes state=directory
+  - name: Make directory for kubelet config
+    file: path=/var/lib/kubelet state=directory
+  - name: Upload CA certificate pem
+    copy:
+      src: ../output/ca.pem
+      dest: /var/lib/kubernetes
+      owner: root
+      group: root
+      mode: 0644
+  - name: Upload Kubernetes certificate pem
+    copy:
+      src: ../output/kubernetes.pem
+      dest: /var/lib/kubernetes
+      owner: root
+      group: root
+      mode: 0644
+  - name: Upload Kubernetes key pem
+    copy:
+      src: ../output/kubernetes-key.pem
+      dest: /var/lib/kubernetes
+      owner: root
+      group: root
+      mode: 0600
+
+
