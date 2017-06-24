@@ -1,6 +1,7 @@
 # k8s-bare-metal
 
-Guide for running Kubernetes on Triton using Packer and Terraform.
+Guide for running Kubernetes on Triton using Packer and Terraform running on a
+Joyent Triton bare metal container and KVM instance.
 
 The initial goal of this guide is to build out the following instances akin to
 the Hard Way post but with extended Triton exclusive features.
@@ -8,7 +9,6 @@ the Hard Way post but with extended Triton exclusive features.
 - 1x `controller` infrastructure container running `kube-apiserver`,
   `kube-controller-manager`, and `kube-scheduler`.
 - 1x `worker` running KVM for `kubelet`, `kube-proxy`, and `docker`.
-- 1x `edge worker` running KVM for `kubelet`, `kube-proxy`, and `docker`.
 - 1x `bastion` node for bridging into the private network.
 - `etcd` cluster provided by the Autopilot Pattern
 
@@ -19,8 +19,8 @@ Install the [Triton CLI tool](https://docs.joyent.com/public-cloud/api-access/cl
 Packer templates in this project require JSON5 support in `packer(1)` or the
 `cfgt(1)` utility.
 
-- Usage with unpatched packer: `cfgt -i kvm-edge-worker.json5 | packer build -`
-- Usage with patched packer: `packer build kvm-edge-worker.json5`
+- Usage with unpatched packer: `cfgt -i kvm-worker.json5 | packer build -`
+- Usage with patched packer: `packer build kvm-worker.json5`
 
 [packer w/ JSON5 support](https://github.com/sean-/packer/tree/f-json5)
 cfgt: `go get -u github.com/sean-/cfgt`
@@ -31,11 +31,22 @@ I use [`jq`](https://stedolan.github.io/jq/) below for pulling information.
 
 I also use [`direnv`](https://direnv.net/) for storing environment variables used by this project.
 
+## Setup your Triton CLI tool
+
+```sh
+$ eval "$(triton env us-sw-1)"
+$ env | grep SDC
+SDC_ACCOUNT=test-user
+SDC_KEY_ID=22:45:7d:1c:f5:f0:b9:13:14:d9:ad:9d:aa:1c:83:44
+SDC_KEY_PATH=/Users/test-user/.ssh/id_rsa
+SDC_URL=https://us-sw-1.api.joyent.com
+```
+
 ## Create a private fabric network
 
 * In the Triton dashboard, create a private fabric network with the following
   configuration.
-* Make sure to set it as your default Docker network.
+* Also, set it as your default Docker network.
 
 ```json
 {
@@ -65,9 +76,10 @@ I also use [`direnv`](https://direnv.net/) for storing environment variables use
 This is a great chance to use the Autopilot Pattern etcd project to spin-up a
 private etcd cluster for our Kubernetes services.
 
-* Set your new private network to be the default for Docker containers under the
-  Joyent Public Cloud Portal. This helps supports creating all of our non-public
-  etcd containers in the correct network through Docker Compose.
+* Make sure your new private fabric network is the default network for Docker
+  containers under the Joyent Public Cloud Portal. This helps support creating
+  all of our non-public etcd containers in the correct network through Docker
+  Compose.
 * `git clone git@github.com:autopilotpattern/etcd.git && cd etcd` and run
   `./start.sh`
 * Your cluster should bootstrap on its own.
@@ -80,30 +92,39 @@ $ triton-docker inspect $(triton-docker ps --format "{{.Names}}" --filter 'name=
 
 ## Create Kubernetes images using Packer
 
+Next, we'll use Packer to prebuild some of the utilities and tooling required by
+the remainder of the process. This helps cut down on setup time else where,
+especially when adding more nodes.
+
 First create a bastion for securing our build environment, then build an image
 for each part of our Kubernetes cluster.
 
 1. Run `make build/bastion` to build a bastion image.
 1. `triton create --wait --name=fubarnetes --network=Joyent-SDC-Public,fubarnetes -m user-data="hostname=fubarnetes" k8s-bastion-lx-16.04 14ad9d54`
-1. Grab the IP address of your bastion instance and set to `export BASTION_HOST` env var.
+1. Note the IP address of your bastion instance and set it to `export BASTION_HOST` env var.
 1. Use bastion instance to build remaining images on your private fabric network.
-1. Run `make build/controller build/edge build/worker`
+1. Run `make build/controller build/worker`
 
 ## Provision infrastructure using Terraform
 
+Next, we'll use Terraform to create the instances we'll be deploying Kubernetes
+onto, both the `controller` and `worker`. This will interface with the Triton
+API and create our nodes.
+
 1. Create input variables for Terraform within `.terraform.vars` by copying the
    sample `.terraform.vars.example` file.
-1. To make sure everything is configured properly run `make plan`.
+1. Run `make plan` first and make sure everything is configured.
 1. `make apply` when ready to create your infrastructure.
 
-## Upload assets and restart the cluster
+## Run Ansible to upload assets and restart the cluster
 
 After we've created our infrastructure we're left with a few files that need to
-be uploaded to our nodes. We'll use a simple shell script to upload them then
-restart cluster services. We do this through the bastion instance.
+be uploaded to our nodes. We'll use Ansible to upload them and restart
+Kubernetes services. We'll make use of our bastion instance to bounce into our
+private network.
 
-Since the configuration files and TLS certs are automatically generated, there's
-nothing to do but run scp.
+Since the configuration files and TLS certs are automatically generated, we
+simply need to run Ansible.
 
 ...
 
