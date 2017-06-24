@@ -35,6 +35,61 @@ resource "local_file" "start_apiserver" {
   filename  = "${path.module}/output/start-kube-apiserver.sh"
 }
 
+// kubeconfig ------------------------------------------------------------------
+
+data "template_file" "kubeconfig" {
+  template = "${file("${path.module}/templates/kubeconfig.tpl")}"
+  depends_on = [
+    "triton_machine.worker",
+  ]
+
+  vars {
+    secret_token = "${var.secret_token}"
+    master_ip = "${triton_machine.controller.0.primaryip}"
+  }
+}
+
+resource "local_file" "kubeconfig" {
+  content     = "${data.template_file.kubeconfig.rendered}"
+  filename = "${path.module}/output/kubeconfig"
+}
+
+// start-kubelet.sh ------------------------------------------------------------
+
+data "template_file" "start_kubelet" {
+  template = "${file("${path.module}/scripts/start-kubelet.sh")}"
+  depends_on = [
+    "triton_machine.worker",
+  ]
+
+  vars {
+    master_ip = "${triton_machine.controller.0.primaryip}"
+  }
+}
+
+resource "local_file" "start_kubelet" {
+  content     = "${data.template_file.start_kubelet.rendered}"
+  filename = "${path.module}/output/start-kubelet.sh"
+}
+
+// token.csv -------------------------------------------------------------------
+
+data "template_file" "token_csv" {
+  template = "${file("${path.module}/templates/token.csv.tpl")}"
+  depends_on = [
+    "triton_machine.controller",
+  ]
+
+  vars {
+    secret_token = "${var.secret_token}"
+  }
+}
+
+resource "local_file" "token_csv" {
+  content     = "${data.template_file.token_csv.rendered}"
+  filename = "${path.module}/output/token.csv"
+}
+
 // ssh.config ------------------------------------------------------------------
 
 data "template_file" "ssh_config" {

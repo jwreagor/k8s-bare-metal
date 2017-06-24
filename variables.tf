@@ -14,6 +14,12 @@ variable triton_key_path {
   description = "Path to the SSH private key used by Triton"
 }
 
+# head /dev/urandom | base32 | head -c 8
+variable secret_token {
+  description = "Secret token used by Kubernetes for securing the API server"
+  default = "UWZ6OBSL"
+}
+
 variable bastion_host {
   description = "Bastion we use to bounce SSH connections into our private network"
 }

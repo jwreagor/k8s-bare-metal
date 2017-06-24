@@ -4,32 +4,54 @@
   become: true
   remote_user: root
   tasks:
-  - name: Make directory for Kubernetes
+  - name: make directory for Kubernetes
     file: path=/var/lib/kubernetes state=directory
-  - name: Make directory for provider configs
+  - name: make directory for provider configs
     file: path=/etc/kubernetes state=directory
-  - name: Make directory for kubelet config
+  - name: make directory for kubelet config
     file: path=/var/lib/kubelet state=directory
-  - name: Upload CA certificate pem
+  - name: upload CA certificate pem
     copy:
       src: ../output/ca.pem
       dest: /var/lib/kubernetes
       owner: root
       group: root
       mode: 0644
-  - name: Upload Kubernetes certificate pem
+  - name: upload Kubernetes certificate pem
     copy:
       src: ../output/kubernetes.pem
       dest: /var/lib/kubernetes
       owner: root
       group: root
       mode: 0644
-  - name: Upload Kubernetes key pem
+  - name: upload Kubernetes key pem
     copy:
       src: ../output/kubernetes-key.pem
       dest: /var/lib/kubernetes
       owner: root
       group: root
       mode: 0600
+  - name: upload kubelet.service systemd unit
+    copy:
+      src: ../templates/kubelet.service
+      dest: /etc/systemd/system
+      owner: root
+      group: root
+      mode: 0600
+  - name: upload kube-proxy.service systemd unit
+    copy:
+      src: ../templates/kube-proxy.service
+      dest: /etc/systemd/system
+      owner: root
+      group: root
+      mode: 0600
+  - name: upload start-kubelet.sh script
+    copy:
+      src: ../output/start-kubelet.sh
+      dest: /usr/local/sbin
+      owner: root
+      group: root
+      mode: 0500
+
 
 
