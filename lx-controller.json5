@@ -49,7 +49,7 @@
         // Update packaging
         "sudo apt-get update",
         // Additional packages for management
-        "sudo apt-get install -y bash tmux",
+        "sudo apt-get install -y bash tmux python-minimal",
         // Install Kubernetes binaries
         "for bin in kube-apiserver kube-controller-manager kube-scheduler kubectl; do sudo wget --no-verbose -P /usr/local/bin/ https://storage.googleapis.com/kubernetes-release/release/v1.5.6/bin/linux/amd64/$bin && sudo chmod +x /usr/local/bin/$bin; done",
       ],

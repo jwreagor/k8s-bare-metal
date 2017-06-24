@@ -49,7 +49,7 @@
         // Update packaging
         "sudo apt-get update",
         // Additional packages for management
-        "sudo apt-get install -y bash tmux wget curl jq ca-certificates",
+        "sudo apt-get install -y bash tmux wget curl jq ca-certificates python-minimal",
         // Install Docker 1.12.1
         "sudo wget --no-verbose https://get.docker.com/builds/Linux/x86_64/docker-1.12.1.tgz && sudo tar -xvf docker-1.12.1.tgz && sudo cp docker/docker* /usr/bin/",
         // Install CNI plugins

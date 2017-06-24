@@ -47,7 +47,7 @@
         // Update packaging
         "apt-get update",
         // Additional packages for management
-        "apt-get install -y bash tmux",
+        "apt-get install -y bash tmux python-minimal",
         // Install kubelet
         "sudo wget --no-verbose -P /usr/bin https://storage.googleapis.com/kubernetes-release/release/v1.5.6/bin/linux/amd64/kubectl && sudo chmod +x /usr/bin/kubectl",
         // Install cfssl tools
