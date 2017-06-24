@@ -14,7 +14,19 @@ the Hard Way post but with extended Triton exclusive features.
 
 ## Dependencies
 
+Install Packer 1.1.0.
+
+Install Terraform 0.9.6.
+
 Install the [Triton CLI tool](https://docs.joyent.com/public-cloud/api-access/cloudapi).
+
+Certificates are created via CloudFlare's PKI toolkit, [`cfssl`](https://cfssl.org/).
+
+I use [`jq`](https://stedolan.github.io/jq/) below for pulling information.
+
+I also use [`direnv`](https://direnv.net/) for storing environment variables used by this project.
+
+### Note on Packer
 
 Packer templates in this project require JSON5 support in `packer(1)` or the
 `cfgt(1)` utility.
@@ -24,12 +36,6 @@ Packer templates in this project require JSON5 support in `packer(1)` or the
 
 [packer w/ JSON5 support](https://github.com/sean-/packer/tree/f-json5)
 cfgt: `go get -u github.com/sean-/cfgt`
-
-Certificates are created via CloudFlare's PKI toolkit, [`cfssl`](https://cfssl.org/).
-
-I use [`jq`](https://stedolan.github.io/jq/) below for pulling information.
-
-I also use [`direnv`](https://direnv.net/) for storing environment variables used by this project.
 
 ## Setup your Triton CLI tool
 
