@@ -66,7 +66,7 @@ data "template_file" "controller_ansible" {
 
 data "template_file" "worker_ansible" {
   count = "${length(triton_machine.worker.*.primaryip)}"
-  template = "${file("${path.module}/templates/hostname.tpl")}"
+  template = "${file("${path.module}/templates/hostuser.tpl")}"
 
   vars {
     index = "${count.index + 1}"
