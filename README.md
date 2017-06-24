@@ -132,7 +132,11 @@ private network.
 Since the configuration files and TLS certs are automatically generated, we
 simply need to run Ansible.
 
-...
+Ansible performs the following...
+
+1. Uploads generated configs and certificates onto remote machines.
+1. Restarts services
+1. Creates VXLAN networking and routes based on `kubectl get nodes`
 
 ## Notes
 
