@@ -59,6 +59,16 @@ show: ## Show the Terraform state
 destroy:
 	$(TERRAFORM) destroy -state=${TFSTATE_FILE} -var-file=${TFVARS_FILE}
 
+# Ansible Targets
+
+config: config/controllers config/workers ## Run Ansible over our remote hosts through our bastion instance
+
+config/workers:: ## Build out worker nodes
+	ansible -u ubuntu -v workers -a "hostname"
+
+config/controllers:: ## Build out controller nodes
+	ansible -u root -v controllers -a "hostname"
+
 # Triton Targets
 
 list-lx:: ## Show all Ubuntu images on Triton
