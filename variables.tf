@@ -14,6 +14,15 @@ variable triton_key_path {
   description = "Path to the SSH private key used by Triton"
 }
 
+variable bastion_host {
+  description = "Bastion we use to bounce SSH connections into our private network"
+}
+
+variable bastion_user {
+  description = "If using an LX ubuntu image we'll use root, otherwise ubuntu"
+  default = "root"
+}
+
 variable bastion_public_key {
   description = "Public SSH key for the private key used across all nodes"
 }
@@ -31,10 +40,6 @@ variable default_user {
   default = "ubuntu"
 }
 
-variable bastion_package {
-  default = "g4-highcpu-512M"
-}
-
 variable controller_package {
   description = "Package which defines the compute attributes of a controller"
   default = "g4-highcpu-512M"
@@ -48,10 +53,6 @@ variable worker_package {
 variable edge_worker_package {
   description = "Package which defines the compute attributes of an edge worker"
   default = "k4-highcpu-kvm-1.75G"
-}
-
-variable bastion_image {
-  description = "The UUID of your k8s-bastion-lx-16.04 image"
 }
 
 variable controller_image {
@@ -77,6 +78,14 @@ variable etcd2_ip {
 variable etcd3_ip {
   description = "IP address of your etcd cluster node 3"
 }
+
+# variable bastion_package {
+#   default = "g4-highcpu-512M"
+# }
+
+# variable bastion_image {
+#   description = "The UUID of your k8s-bastion-lx-16.04 image"
+# }
 
 # variable etcd_package {
 #   default = "g4-highcpu-512M"
