@@ -8,3 +8,4 @@ cert/*.pem
 cert/*.csr
 cert/kubernetes-csr.json
 *.state.lock.info
+output/*
