@@ -3,7 +3,6 @@
   "hosts": [
     ${etcd_ips},
     ${worker_ips},
-    ${edge_worker_ips},
     ${controller_ips},
     "127.0.0.1"
   ],
