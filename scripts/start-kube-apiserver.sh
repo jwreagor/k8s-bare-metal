@@ -1,10 +1,11 @@
 #!/bin/bash
-IP=$(/sbin/ifconfig net0 | awk '/inet addr/ {split ($2,A,":"); print A[2]}')
+IP=$(ifconfig eth0 |grep "inet addr" |awk '{print $2}' |awk -F: '{print $2}')
+
 /usr/local/bin/kube-apiserver \
   --admission-control=NamespaceLifecycle,LimitRanger,SecurityContextDeny,ServiceAccount,ResourceQuota \
-  --advertise-address=${IP} \
+  --advertise-address=$IP \
   --allow-privileged=true \
-  --apiserver-count=${apiserver_count} \
+  --apiserver-count=${controller_count} \
   --authorization-mode=ABAC \
   --authorization-policy-file=/var/lib/kubernetes/authorization-policy.jsonl \
   --bind-address=0.0.0.0 \

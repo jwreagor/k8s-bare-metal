@@ -1,7 +1,7 @@
 #!/bin/bash
 /usr/bin/kubelet \
   --allow-privileged=true \
-  --api-servers=${apiserver_ip} \
+  --api-servers=http://${master_ip}:6443 \
   --cluster-dns=10.32.0.10 \
   --cluster-domain=cluster.local \
   --container-runtime=docker \
