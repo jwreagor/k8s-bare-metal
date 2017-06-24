@@ -124,18 +124,18 @@ API and create our nodes.
 
 ## Run Ansible to upload assets and restart the cluster
 
-After we've created our infrastructure we're left with a few files that need to
-be uploaded to our nodes. We'll use Ansible to upload them and restart
-Kubernetes services. We'll make use of our bastion instance to bounce into our
-private network.
+After we've created our infrastructure we're left with a few files and
+networking configured across our cluster. We'll use Ansible here since it works
+great for this sort of thing. Terraform will output everything we need and make
+use of our bastion instance to bounce into our private network.
 
-Since the configuration files and TLS certs are automatically generated, we
-simply need to run Ansible.
+Everything is automatically generated so we simply need to run `make config`.
 
 Ansible performs the following...
 
-1. Uploads generated configs and certificates onto remote machines.
-1. Restarts services
+1. Uploads generated configs and certificates onto all controllers and workers.
+1. Restarts systemd services.
+1. Post installation Kubernetes setup.
 1. Creates VXLAN networking and routes based on `kubectl get nodes`
 
 ## Notes
