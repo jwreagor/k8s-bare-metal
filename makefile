@@ -4,7 +4,7 @@ TF_PLAN ?= .terraform.plan
 TERRAFORM=$(shell which 2>&1 /dev/null terraform | head -1)
 PACKER=$(shell which 2>&1 /dev/null packer | head -1)
 
-TEMPLATES ?= kvm-edge-worker.json kvm-worker.json lx-bastion.json lx-controller.json lx-etcd.json
+TEMPLATES ?= kvm-worker.json lx-bastion.json lx-controller.json
 
 .SUFFIXES: .json .json5
 
@@ -36,16 +36,10 @@ build:: $(TEMPLATES) ## Build our Triton images
 build/controller: lx-controller.json
 	$(PACKER) build $<
 
-build/edge: kvm-edge-worker.json
-	$(PACKER) build $<
-
 build/worker: kvm-worker.json
 	$(PACKER) build $<
 
 build/bastion: lx-bastion.json
-	$(PACKER) build $<
-
-build/etcd: lx-etcd.json
 	$(PACKER) build $<
 
 # Terraform Targets
