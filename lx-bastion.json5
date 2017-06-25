@@ -48,12 +48,14 @@
         "apt-get update",
         // Additional packages for management
         "apt-get install -y bash tmux curl jq python-minimal nodejs npm",
-        // UUuuuhhhhhh....
+        // Fix script references to node by symlinking nodejs
         "ln -s /usr/bin/nodejs /usr/bin/node",
-        // Node tools
+        // Install node tools
         "npm install -g sshp",
         // Install kubelet
         "sudo wget --no-verbose -P /usr/bin https://storage.googleapis.com/kubernetes-release/release/v1.5.6/bin/linux/amd64/kubectl && sudo chmod +x /usr/bin/kubectl",
+        // Install etcd tools
+        "sudo wget --no-verbose -P /tmp https://github.com/coreos/etcd/releases/download/v3.2.0/etcd-v3.2.0-linux-amd64.tar.gz && tar -zxvf /tmp/etcd-v3.2.0-linux-amd64.tar.gz -C /tmp && sudo mv /tmp/etcd-v3.2.0-linux-amd64/etcdctl /usr/local/bin",
         // Install cfssl tools
         "for bin in cfssl-bundle cfssl-certinfo cfssl-newkey cfssl-scan cfssl cfssljson mkbundle multirootca; do sudo wget --no-verbose -P /usr/local/bin https://pkg.cfssl.org/R1.2/${bin}_linux-amd64 && sudo ln -s /usr/local/bin/${bin}_linux-amd64 /usr/local/bin/${bin} && sudo chmod +x /usr/local/bin/${bin}; done",
       ],
