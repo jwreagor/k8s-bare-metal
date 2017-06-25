@@ -139,8 +139,11 @@ Ansible performs the following...
 
 1. Uploads generated configs and certificates onto all controllers and workers.
 1. Restarts systemd services.
-1. Post installation Kubernetes setup.
-1. Creates VXLAN networking and routes based on `kubectl get nodes`
+1. ~~Post installation Kubernetes setup.~~
+1. ~~Creates VXLAN networking and routes based on `kubectl get nodes`~~
+
+**WIP**: This part isn't complete yet. Cluster is healthy but pod networking is
+not hooked up yet.
 
 ## Notes
 
