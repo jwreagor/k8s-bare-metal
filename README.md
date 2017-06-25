@@ -6,30 +6,34 @@ Joyent Triton bare metal container and KVM instance.
 The initial goal of this guide is to build out the following instances akin to
 the Hard Way post but with extended Triton exclusive features.
 
+- 1x `bastion` node (jump box) for tunneling into our private network.
 - 1x `controller` infrastructure container running `kube-apiserver`,
   `kube-controller-manager`, and `kube-scheduler`.
 - 1x `worker` running KVM for `kubelet`, `kube-proxy`, and `docker`.
-- 1x `bastion` node for bridging into the private network.
 - `etcd` cluster provided by the Autopilot Pattern
 
 ## Dependencies
 
-Install Packer 1.1.0.
+- Install [Packer][packer] 1.1.0.
+- Install [Terraform][terraform] 0.9.8.
+- Install [Ansible][ansible] 2.3.0.0.
+- Install the [Triton CLI][triton-cli].
+- Certificates are created via CloudFlare's PKI toolkit [`cfssl`][cfssl].
+- I use [`jq`][jq] below for parsing JSON.
+- I also use [`direnv`][direnv] for storing environment variables.
 
-Install Terraform 0.9.6.
-
-Install the [Triton CLI tool](https://docs.joyent.com/public-cloud/api-access/cloudapi).
-
-Certificates are created via CloudFlare's PKI toolkit, [`cfssl`](https://cfssl.org/).
-
-I use [`jq`](https://stedolan.github.io/jq/) below for pulling information.
-
-I also use [`direnv`](https://direnv.net/) for storing environment variables used by this project.
+[packer]: https://www.packer.io/
+[terraform]: https://www.terraform.io/
+[ansible]: https://www.ansible.com/
+[triton-cli]: https://docs.joyent.com/public-cloud/api-access/cloudapi
+[cfssl]: https://cfssl.org/
+[jq]: https://stedolan.github.io/jq/
+[direnv]: https://direnv.net/
 
 ### Note on Packer
 
 Packer templates in this project require JSON5 support in `packer(1)` or the
-`cfgt(1)` utility.
+`cfgt(1)` utility. Most of this tool interaction is handled by the `makefile`.
 
 - Usage with unpatched packer: `cfgt -i kvm-worker.json5 | packer build -`
 - Usage with patched packer: `packer build kvm-worker.json5`
