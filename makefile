@@ -75,25 +75,25 @@ config/check:: ## Build out controller nodes
 # Triton Targets
 
 list-lx:: ## Show all Ubuntu images on Triton
-	triton img ls name=~ubuntu type=lx-dataset
+	@triton img ls name=~ubuntu type=lx-dataset
 
 list-kvm:: ## Show all Ubuntu images on Triton
-	triton img ls name=~ubuntu type=zvol
+	@triton img ls name=~ubuntu type=zvol
 
 list-k8s:: ## Show custom k8s images built by this project
-	triton img ls name=~k8s
+	@triton img ls name=~k8s
 
 instances:: ## Show all running instances on Triton
-	triton instances -o name,ips,id
+	@triton instances -o name,ips,id
 
 custom-images:: ## Show my Triton images
-	triton images -l public=false
+	@triton images -l public=false
 
 networks::  ## Show Triton networks
-	triton network list -l
+	@triton network list -l
 
 packages::  ## Show Triton Packages
-	triton packages
+	@triton packages
 
 # Misc Targets
 deps:: deps/terraform deps/packer deps/cfgt ## Install all local dependencies
