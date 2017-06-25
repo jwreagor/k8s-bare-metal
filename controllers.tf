@@ -1,5 +1,5 @@
 resource "triton_machine" "controller" {
-  count = 2
+  count = 1
   name  = "controller${format("%02d", count.index)}"
 
   package = "${var.controller_package}"
