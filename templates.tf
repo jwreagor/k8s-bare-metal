@@ -68,14 +68,14 @@ data "template_file" "start_kubelet" {
 }
 
 resource "local_file" "start_kubelet" {
-  content     = "${data.template_file.start_kubelet.rendered}"
+  content  = "${data.template_file.start_kubelet.rendered}"
   filename = "${path.module}/output/start-kubelet.sh"
 }
 
 // token.csv -------------------------------------------------------------------
 
 data "template_file" "token_csv" {
-  template = "${file("${path.module}/templates/token.csv.tpl")}"
+  template   = "${file("${path.module}/templates/token.csv.tpl")}"
   depends_on = [
     "triton_machine.controller",
   ]
@@ -86,7 +86,7 @@ data "template_file" "token_csv" {
 }
 
 resource "local_file" "token_csv" {
-  content     = "${data.template_file.token_csv.rendered}"
+  content  = "${data.template_file.token_csv.rendered}"
   filename = "${path.module}/output/token.csv"
 }
 
@@ -96,7 +96,7 @@ data "template_file" "ssh_config" {
   template = "${file("${path.module}/templates/ssh.config.tpl")}"
 
   vars {
-    bastion_ip = "${var.bastion_host}"
+    bastion_ip    = "${var.bastion_host}"
     identity_file = "${var.triton_key_path}"
   }
 }
@@ -109,8 +109,12 @@ resource "local_file" "ssh_config" {
 // ansible-inventory -----------------------------------------------------------
 
 data "template_file" "controller_ansible" {
-  count = "${length(triton_machine.controller.*.primaryip)}"
+  count = "${triton_machine.controller.count}"
   template = "${file("${path.module}/templates/hostname.tpl")}"
+
+  depends_on = [
+    "triton_machine.controller",
+  ]
 
   vars {
     index = "${count.index + 1}"
@@ -120,8 +124,12 @@ data "template_file" "controller_ansible" {
 }
 
 data "template_file" "worker_ansible" {
-  count = "${length(triton_machine.worker.*.primaryip)}"
+  count = "${triton_machine.worker.count}"
   template = "${file("${path.module}/templates/hostuser.tpl")}"
+
+  depends_on = [
+    "triton_machine.worker",
+  ]
 
   vars {
     index = "${count.index + 1}"
@@ -144,8 +152,3 @@ resource "local_file" "ansible_inventory" {
   content   = "${data.template_file.ansible_inventory.rendered}"
   filename  = "${path.module}/output/ansible_inventory"
 }
-
-# output "ansible_inventory" {
-#     value = "${template_file.ansible_hosts.rendered}"
-# }
-

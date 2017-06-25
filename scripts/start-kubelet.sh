@@ -1,5 +1,5 @@
 #!/bin/bash
-/usr/bin/kubelet \
+exec /usr/bin/kubelet \
   --allow-privileged=true \
   --api-servers=https://${master_ip}:6443 \
   --cluster-dns=10.32.0.10 \

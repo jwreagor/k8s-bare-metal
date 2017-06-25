@@ -8,7 +8,7 @@ Host bastion
   ForwardAgent           yes
 
 Host *
-  User ubuntu
+  User                   ubuntu
   ProxyCommand           ssh -q -W %h:%p root@${bastion_ip}
   ForwardAgent           yes
   ServerAliveInterval    60

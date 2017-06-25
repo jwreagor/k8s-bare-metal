@@ -1,7 +1,7 @@
 #!/bin/bash
 IP=$(ifconfig eth0 |grep "inet addr" |awk '{print $2}' |awk -F: '{print $2}')
 
-/usr/local/bin/kube-controller-manager \
+exec /usr/local/bin/kube-controller-manager \
   --allocate-node-cidrs=true \
   # --cloud-provider=triton \
   # --cloud-config=/etc/kubernetes/cloud_config \

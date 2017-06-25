@@ -4,68 +4,51 @@
   become: true
   remote_user: root
   tasks:
+
   - name: make directory for Kubernetes
-    file: path=/var/lib/kubernetes state=directory
-  - name: make directory for provider configs
-    file: path=/etc/kubernetes state=directory
-  - name: make directory for kubelet config
-    file: path=/var/lib/kubelet state=directory
-  - name: upload CA certificate pem
+    file: path={{ item }} state=directory
+    with_items:
+      - /var/lib/kubernetes
+      - /etc/kubernetes
+
+  - name: upload certificates
     copy:
-      src: ../output/ca.pem
-      dest: /var/lib/kubernetes
-      owner: root
-      group: root
-      mode: 0644
-  - name: upload Kubernetes certificate pem
-    copy:
-      src: ../output/kubernetes.pem
-      dest: /var/lib/kubernetes
-      owner: root
-      group: root
-      mode: 0644
-  - name: upload Kubernetes key pem
-    copy:
-      src: ../output/kubernetes-key.pem
+      src: ../output/{{ item }}
       dest: /var/lib/kubernetes
       owner: root
       group: root
       mode: 0600
-  - name: upload kube-apiserver systemd unit
+    become: true
+    with_items:
+      - ca.pem
+      - kubernetes.pem
+      - kubernetes-key.pem
+
+  - name: upload systemd units
     copy:
-      src: ../templates/kube-apiserver.service
+      src: ../templates/{{ item }}
       dest: /etc/systemd/system
       owner: root
       group: root
       mode: 0600
-  - name: upload kube-controller-manager systemd unit
+    become: true
+    with_items:
+      - kube-apiserver.service
+      - kube-controller-manager.service
+      - kube-scheduler.service
+
+  - name: upload systemd service scripts
     copy:
-      src: ../templates/kube-controller-manager.service
-      dest: /etc/systemd/system
-      owner: root
-      group: root
-      mode: 0600
-  - name: upload kube-scheduler systemd unit
-    copy:
-      src: ../templates/kube-scheduler.service
-      dest: /etc/systemd/system
-      owner: root
-      group: root
-      mode: 0600
-  - name: upload start-kube-controller-manager.sh script
-    copy:
-      src: ../output/start-kube-controller-manager.sh
+      src: ../output/{{ item }}
       dest: /usr/local/sbin
       owner: root
       group: root
       mode: 0500
-  - name: upload start-kube-apiserver.sh script
-    copy:
-      src: ../output/start-kube-apiserver.sh
-      dest: /usr/local/sbin
-      owner: root
-      group: root
-      mode: 0500
+    become: true
+    with_items:
+      - start-kube-apiserver.sh
+      - start-kube-controller-manager.sh
+
   - name: upload start-kube-scheduler.sh script
     copy:
       src: ../scripts/start-kube-scheduler.sh
@@ -73,6 +56,7 @@
       owner: root
       group: root
       mode: 0500
+
   - name: upload token.csv
     copy:
       src: ../output/token.csv
@@ -80,6 +64,7 @@
       owner: root
       group: root
       mode: 0600
+
   - name: upload authorization-policy.jsonl
     copy:
       src: ../templates/authorization-policy.jsonl
@@ -87,20 +72,38 @@
       owner: root
       group: root
       mode: 0600
-  - name: Force systemd to reread configs
-    systemd: daemon_reload=yes
+
+  - name: reload systemd
+    command: systemctl daemon-reload
+
   - name: enable and start kube-apiserver
     systemd:
       name: kube-apiserver
       enabled: yes
       state: started
+
   - name: enable and start kube-controller-manager
     systemd:
       name: kube-controller-manager
       enabled: yes
       state: started
+
   - name: enable and start kube-scheduler
     systemd:
       name: kube-scheduler
       enabled: yes
       state: started
+
+  # - name: verify kubernetes status
+  #   shell: kubectl get componentstatuses
+  #   register: cmd_result
+  #   retries: 5
+  #   delay: 10
+
+  # - assert:
+  #   that:
+  #     - "'scheduler            Healthy' in cmd_result.stdout"
+  #     - "'controller-manager   Healthy' in cmd_result.stdout"
+  #     - "'etcd-0               Healthy' in cmd_result.stdout"
+  #     - "'etcd-1               Healthy' in cmd_result.stdout"
+  #     - "'etcd-2               Healthy' in cmd_result.stdout"

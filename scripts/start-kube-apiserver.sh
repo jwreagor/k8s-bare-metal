@@ -1,7 +1,7 @@
 #!/bin/bash
 IP=$(ifconfig eth0 |grep "inet addr" |awk '{print $2}' |awk -F: '{print $2}')
 
-/usr/local/bin/kube-apiserver \
+exec /usr/local/bin/kube-apiserver \
   --admission-control=NamespaceLifecycle,LimitRanger,SecurityContextDeny,ServiceAccount,ResourceQuota \
   --advertise-address=$IP \
   --allow-privileged=true \
