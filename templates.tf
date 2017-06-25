@@ -1,7 +1,7 @@
 // start-kube-controller-manager.sh --------------------------------------------
 
 data "template_file" "start_controller_manager" {
-  template = "${file("${path.module}/scripts/start-kube-controller-manager.sh")}"
+  template   = "${file("${path.module}/scripts/start-kube-controller-manager.sh")}"
   depends_on = [
     "triton_machine.controller",
   ]
@@ -12,21 +12,21 @@ data "template_file" "start_controller_manager" {
 }
 
 resource "local_file" "start_controller_manager" {
-  content     = "${data.template_file.start_controller_manager.rendered}"
+  content  = "${data.template_file.start_controller_manager.rendered}"
   filename = "${path.module}/output/start-kube-controller-manager.sh"
 }
 
 // start-kube-apiserver.sh -----------------------------------------------------
 
 data "template_file" "start_apiserver" {
-  template = "${file("${path.module}/scripts/start-kube-apiserver.sh")}"
+  template   = "${file("${path.module}/scripts/start-kube-apiserver.sh")}"
   depends_on = [
     "triton_machine.controller",
   ]
 
   vars {
     controller_count = "${length(triton_machine.controller.*.primaryip)}"
-    etcd_servers = "${join(",", formatlist("http://%s:2379", list(var.etcd1_ip, var.etcd2_ip, var.etcd3_ip)))}"
+    etcd_servers     = "${join(",", formatlist("http://%s:2379", list(var.etcd1_ip, var.etcd2_ip, var.etcd3_ip)))}"
   }
 }
 
@@ -38,26 +38,26 @@ resource "local_file" "start_apiserver" {
 // kubeconfig ------------------------------------------------------------------
 
 data "template_file" "kubeconfig" {
-  template = "${file("${path.module}/templates/kubeconfig.tpl")}"
+  template   = "${file("${path.module}/templates/kubeconfig.tpl")}"
   depends_on = [
     "triton_machine.worker",
   ]
 
   vars {
     secret_token = "${var.secret_token}"
-    master_ip = "${triton_machine.controller.0.primaryip}"
+    master_ip    = "${triton_machine.controller.0.primaryip}"
   }
 }
 
 resource "local_file" "kubeconfig" {
-  content     = "${data.template_file.kubeconfig.rendered}"
+  content  = "${data.template_file.kubeconfig.rendered}"
   filename = "${path.module}/output/kubeconfig"
 }
 
 // start-kubelet.sh ------------------------------------------------------------
 
 data "template_file" "start_kubelet" {
-  template = "${file("${path.module}/scripts/start-kubelet.sh")}"
+  template   = "${file("${path.module}/scripts/start-kubelet.sh")}"
   depends_on = [
     "triton_machine.worker",
   ]
@@ -109,7 +109,7 @@ resource "local_file" "ssh_config" {
 // ansible-inventory -----------------------------------------------------------
 
 data "template_file" "controller_ansible" {
-  count = "${triton_machine.controller.count}"
+  count    = "${triton_machine.controller.count}"
   template = "${file("${path.module}/templates/hostname.tpl")}"
 
   depends_on = [
@@ -124,7 +124,7 @@ data "template_file" "controller_ansible" {
 }
 
 data "template_file" "worker_ansible" {
-  count = "${triton_machine.worker.count}"
+  count    = "${triton_machine.worker.count}"
   template = "${file("${path.module}/templates/hostuser.tpl")}"
 
   depends_on = [
@@ -142,13 +142,13 @@ data "template_file" "ansible_inventory" {
   template = "${file("${path.module}/templates/ansible_inventory.tpl")}"
 
   vars {
-    bastion_ip = "${var.bastion_host}"
+    bastion_ip       = "${var.bastion_host}"
     controller_hosts = "${join("\n", data.template_file.controller_ansible.*.rendered)}"
-    worker_hosts = "${join("\n", data.template_file.worker_ansible.*.rendered)}"
+    worker_hosts     = "${join("\n", data.template_file.worker_ansible.*.rendered)}"
   }
 }
 
 resource "local_file" "ansible_inventory" {
-  content   = "${data.template_file.ansible_inventory.rendered}"
-  filename  = "${path.module}/output/ansible_inventory"
+  content  = "${data.template_file.ansible_inventory.rendered}"
+  filename = "${path.module}/output/ansible_inventory"
 }
