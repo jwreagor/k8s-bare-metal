@@ -152,3 +152,7 @@ Ansible performs the following...
   `ubuntu`, on Joyent built Ubuntu images use `root`.
 
 [default]: https://github.com/joyent/node-triton/issues/3#issuecomment-136519245
+
+## License
+
+Mozilla Public License Version 2.0
