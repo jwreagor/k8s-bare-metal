@@ -1,10 +1,11 @@
 #!/bin/bash
-IP=$(ifconfig eth0 |grep "inet addr" |awk '{print $2}' |awk -F: '{print $2}')
+export IP=$(ifconfig eth0 |grep "inet addr" |awk '{print $2}' |awk -F: '{print $2}')
+
+# --cloud-provider=triton
+# --cloud-config=/etc/kubernetes/cloud_config
 
 exec /usr/local/bin/kube-controller-manager \
   --allocate-node-cidrs=true \
-  # --cloud-provider=triton \
-  # --cloud-config=/etc/kubernetes/cloud_config \
   --cluster-cidr=10.200.0.0/16 \
   --cluster-name=kubernetes \
   --leader-elect=true \
