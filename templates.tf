@@ -72,6 +72,24 @@ resource "local_file" "start_kubelet" {
   filename = "${path.module}/output/start-kubelet.sh"
 }
 
+// start-kube-proxy.sh ---------------------------------------------------------
+
+data "template_file" "start_kube_proxy" {
+  template   = "${file("${path.module}/scripts/start-kube-proxy.sh")}"
+  depends_on = [
+    "triton_machine.worker",
+  ]
+
+  vars {
+    master_ip = "${triton_machine.controller.0.primaryip}"
+  }
+}
+
+resource "local_file" "start_kube_proxy" {
+  content  = "${data.template_file.start_kube_proxy.rendered}"
+  filename = "${path.module}/output/start-kube-proxy.sh"
+}
+
 // token.csv -------------------------------------------------------------------
 
 data "template_file" "token_csv" {

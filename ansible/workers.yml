@@ -47,7 +47,35 @@
       dest: /usr/local/sbin
       owner: root
       group: root
-      mode: 0500
+      mode: 0700
 
+  - name: upload start-kube-proxy.sh script
+    copy:
+      src: ../output/start-kube-proxy.sh
+      dest: /usr/local/sbin
+      owner: root
+      group: root
+      mode: 0700
 
+  - name: upload kubeconfig
+    copy:
+      src: ../output/kubeconfig
+      dest: /var/lib/kubelet
+      owner: root
+      group: root
+      mode: 0600
 
+  - name: reload systemd
+    command: systemctl daemon-reload
+
+  - name: enable and start kubelet
+    systemd:
+      name: kubelet
+      enabled: yes
+      state: started
+
+  - name: enable and start kube-proxy
+    systemd:
+      name: kube-proxy
+      enabled: yes
+      state: started
