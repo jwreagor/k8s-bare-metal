@@ -20,7 +20,7 @@
       triton_key_material: "{{ user `triton_key_path` }}",
 
       source_machine_name: "k8s-worker-kvm-builder",
-      source_machine_package: "k4-highcpu-kvm-1.75G",
+      source_machine_package: "k4-highcpu-kvm-3.75G",
       source_machine_image: "554abb2e-a957-4b51-a601-97c934eadf33",
 
       // Private network for control plane only

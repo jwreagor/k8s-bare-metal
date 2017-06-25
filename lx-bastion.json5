@@ -20,7 +20,7 @@
       triton_key_material: "{{ user `triton_key_path` }}",
 
       source_machine_name: "k8s-bastion-lx-builder",
-      source_machine_package: "g4-highcpu-512M",
+      source_machine_package: "g4-highcpu-2G",
       source_machine_image: "7b5981c4-1889-11e7-b4c5-3f3bdfc9b88b",
 
       // Both the private and public networks
@@ -47,7 +47,11 @@
         // Update packaging
         "apt-get update",
         // Additional packages for management
-        "apt-get install -y bash tmux python-minimal",
+        "apt-get install -y bash tmux curl jq python-minimal nodejs npm",
+        // UUuuuhhhhhh....
+        "ln -s /usr/bin/nodejs /usr/bin/node",
+        // Node tools
+        "npm install -g sshp",
         // Install kubelet
         "sudo wget --no-verbose -P /usr/bin https://storage.googleapis.com/kubernetes-release/release/v1.5.6/bin/linux/amd64/kubectl && sudo chmod +x /usr/bin/kubectl",
         // Install cfssl tools
