@@ -1,6 +1,8 @@
 #!/bin/bash
 export IP=$(ifconfig eth0 |grep "inet addr" |awk '{print $2}' |awk -F: '{print $2}')
 
+# --etcd-cafile=/var/lib/kubernetes/ca.pem
+
 exec /usr/local/bin/kube-apiserver \
   --admission-control=NamespaceLifecycle,LimitRanger,SecurityContextDeny,ServiceAccount,ResourceQuota \
   --advertise-address=$IP \
@@ -10,7 +12,6 @@ exec /usr/local/bin/kube-apiserver \
   --authorization-policy-file=/var/lib/kubernetes/authorization-policy.jsonl \
   --bind-address=0.0.0.0 \
   --enable-swagger-ui=true \
-  --etcd-cafile=/var/lib/kubernetes/ca.pem \
   --etcd-servers=${etcd_servers} \
   --insecure-bind-address=0.0.0.0 \
   --kubelet-certificate-authority=/var/lib/kubernetes/ca.pem \
