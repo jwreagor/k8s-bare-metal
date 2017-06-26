@@ -1,10 +1,10 @@
 # k8s-bare-metal
 
-Guide for running Kubernetes on Triton using Packer and Terraform running on a
-Joyent Triton bare metal container and KVM instance.
+Guide for running Kubernetes on [Triton][triton] using Packer and Terraform
+running on a [Joyent Triton][triton] bare metal container and KVM instance.
 
 The initial goal of this guide is to build out the following instances akin to
-the Hard Way post but with extended Triton exclusive features.
+[the Hard Way post](https://www.joyent.com/blog/kubernetes-the-hard-way) but with extended Triton exclusive features.
 
 - 1x `bastion` node (jump box) for tunneling into our private network.
 - 1x `controller` infrastructure container running `kube-apiserver`,
@@ -29,6 +29,7 @@ the Hard Way post but with extended Triton exclusive features.
 [cfssl]: https://cfssl.org/
 [jq]: https://stedolan.github.io/jq/
 [direnv]: https://direnv.net/
+[triton]: https://www.joyent.com/triton/compute
 
 ### Note on Packer
 
