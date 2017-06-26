@@ -5,11 +5,11 @@
   remote_user: root
   tasks:
 
-  - name: make directory for Kubernetes
-    file: path={{ item }} state=directory
-    with_items:
-      - /var/lib/kubernetes
-      - /etc/kubernetes
+  # - name: make directory for Kubernetes
+  #   file: path={{ item }} state=directory
+  #   with_items:
+  #     - /var/lib/kubernetes
+  #     - /etc/kubernetes
 
   - name: upload certificates
     copy:
@@ -24,20 +24,20 @@
       - kubernetes.pem
       - kubernetes-key.pem
 
-  - name: upload systemd units
-    copy:
-      src: ../templates/{{ item }}
-      dest: /etc/systemd/system
-      owner: root
-      group: root
-      mode: 0600
-    become: true
-    with_items:
-      - kube-apiserver.service
-      - kube-controller-manager.service
-      - kube-scheduler.service
+  # - name: upload systemd units
+  #   copy:
+  #     src: ../templates/{{ item }}
+  #     dest: /etc/systemd/system
+  #     owner: root
+  #     group: root
+  #     mode: 0600
+  #   become: true
+  #   with_items:
+  #     - kube-apiserver.service
+  #     - kube-controller-manager.service
+  #     - kube-scheduler.service
 
-  - name: upload systemd service scripts
+  - name: upload service scripts
     copy:
       src: ../output/{{ item }}
       dest: /usr/local/sbin
@@ -46,12 +46,12 @@
       mode: 0500
     become: true
     with_items:
-      - start-kube-apiserver.sh
-      - start-kube-controller-manager.sh
+      - kube-apiserver.sh
+      - kube-controller-manager.sh
 
-  - name: upload start-kube-scheduler.sh script
+  - name: upload kube-scheduler.sh script
     copy:
-      src: ../scripts/start-kube-scheduler.sh
+      src: ../scripts/kube-scheduler.sh
       dest: /usr/local/sbin
       owner: root
       group: root

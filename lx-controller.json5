@@ -49,9 +49,33 @@
         // Update packaging
         "sudo apt-get update",
         // Additional packages for management
-        "sudo apt-get install -y bash tmux python-minimal",
+        "sudo apt-get install -y bash python-minimal",
         // Install Kubernetes binaries
         "for bin in kube-apiserver kube-controller-manager kube-scheduler kubectl; do sudo wget --no-verbose -P /usr/local/bin/ https://storage.googleapis.com/kubernetes-release/release/v1.5.6/bin/linux/amd64/$bin && sudo chmod +x /usr/local/bin/$bin; done",
+        // Make Kubernetes directories
+        "sudo mkdir -p /var/lib/kubernetes /var/lib/kubelet /etc/kubernetes",
+      ],
+    },
+    {
+      type: "file",
+      source: "templates/kube-apiserver.service",
+      destination: "/tmp/kube-apiserver.service",
+    },
+    {
+      type: "file",
+      source: "templates/kube-controller-manager.service",
+      destination: "/tmp/kube-controller-manager.service",
+    },
+    {
+      type: "file",
+      source: "templates/kube-scheduler.service",
+      destination: "/tmp/kube-scheduler.service",
+    },
+    {
+      type: "shell",
+      inline: [
+        "sudo mv /tmp/kube-*.service /etc/systemd/system/ && sudo chmod 600 /etc/systemd/system/kube-apiserver.service /etc/systemd/system/kube-controller-manager.service /etc/systemd/system/kube-scheduler.service",
+        "sudo systemctl disable kube-apiserver kube-controller-manager kube-scheduler",
       ],
     },
   ],

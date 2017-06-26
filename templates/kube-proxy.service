@@ -1,10 +1,9 @@
 [Unit]
 Description=Kubernetes Kube Proxy
-Documentation=https://github.com/GoogleCloudPlatform/kubernetes
+Documentation=https://github.com/kubernetes/kubernetes
 
 [Service]
-ExecStart=/usr/local/sbin/start-kube-proxy.sh
-
+ExecStart=/usr/local/sbin/kube-proxy.sh
 Restart=on-failure
 RestartSec=5
 

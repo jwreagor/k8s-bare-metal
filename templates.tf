@@ -1,7 +1,7 @@
-// start-kube-controller-manager.sh --------------------------------------------
+// kube-controller-manager.sh --------------------------------------------------
 
 data "template_file" "start_controller_manager" {
-  template   = "${file("${path.module}/scripts/start-kube-controller-manager.sh")}"
+  template   = "${file("${path.module}/scripts/kube-controller-manager.sh")}"
   depends_on = [
     "triton_machine.controller",
   ]
@@ -13,13 +13,13 @@ data "template_file" "start_controller_manager" {
 
 resource "local_file" "start_controller_manager" {
   content  = "${data.template_file.start_controller_manager.rendered}"
-  filename = "${path.module}/output/start-kube-controller-manager.sh"
+  filename = "${path.module}/output/kube-controller-manager.sh"
 }
 
-// start-kube-apiserver.sh -----------------------------------------------------
+// kube-apiserver.sh -----------------------------------------------------------
 
 data "template_file" "start_apiserver" {
-  template   = "${file("${path.module}/scripts/start-kube-apiserver.sh")}"
+  template   = "${file("${path.module}/scripts/kube-apiserver.sh")}"
   depends_on = [
     "triton_machine.controller",
   ]
@@ -32,7 +32,7 @@ data "template_file" "start_apiserver" {
 
 resource "local_file" "start_apiserver" {
   content   = "${data.template_file.start_apiserver.rendered}"
-  filename  = "${path.module}/output/start-kube-apiserver.sh"
+  filename  = "${path.module}/output/kube-apiserver.sh"
 }
 
 // kubeconfig ------------------------------------------------------------------
@@ -54,10 +54,10 @@ resource "local_file" "kubeconfig" {
   filename = "${path.module}/output/kubeconfig"
 }
 
-// start-kubelet.sh ------------------------------------------------------------
+// kubelet.sh ------------------------------------------------------------------
 
 data "template_file" "start_kubelet" {
-  template   = "${file("${path.module}/scripts/start-kubelet.sh")}"
+  template   = "${file("${path.module}/scripts/kubelet.sh")}"
   depends_on = [
     "triton_machine.worker",
   ]
@@ -69,13 +69,13 @@ data "template_file" "start_kubelet" {
 
 resource "local_file" "start_kubelet" {
   content  = "${data.template_file.start_kubelet.rendered}"
-  filename = "${path.module}/output/start-kubelet.sh"
+  filename = "${path.module}/output/kubelet.sh"
 }
 
-// start-kube-proxy.sh ---------------------------------------------------------
+// kube-proxy.sh ---------------------------------------------------------------
 
 data "template_file" "start_kube_proxy" {
-  template   = "${file("${path.module}/scripts/start-kube-proxy.sh")}"
+  template   = "${file("${path.module}/scripts/kube-proxy.sh")}"
   depends_on = [
     "triton_machine.worker",
   ]
@@ -87,7 +87,7 @@ data "template_file" "start_kube_proxy" {
 
 resource "local_file" "start_kube_proxy" {
   content  = "${data.template_file.start_kube_proxy.rendered}"
-  filename = "${path.module}/output/start-kube-proxy.sh"
+  filename = "${path.module}/output/kube-proxy.sh"
 }
 
 // token.csv -------------------------------------------------------------------

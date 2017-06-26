@@ -1,11 +1,11 @@
 [Unit]
 Description=Kubernetes Kubelet
-Documentation=https://github.com/GoogleCloudPlatform/kubernetes
+Documentation=https://github.com/kubernetes/kubernetes
 After=docker.service
 Requires=docker.service
 
 [Service]
-ExecStart=/usr/local/sbin/start-kubelet.sh
+ExecStart=/usr/local/sbin/kubelet.sh
 
 Restart=on-failure
 RestartSec=5

@@ -1,5 +1,5 @@
 resource "triton_machine" "worker" {
-  count = 1
+  count = 3
   name  = "worker${format("%02d", count.index)}"
 
   depends_on = [

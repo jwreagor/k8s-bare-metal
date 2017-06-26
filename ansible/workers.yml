@@ -5,12 +5,12 @@
   remote_user: root
   tasks:
 
-  - name: make directory for Kubernetes
-    file: path={{ item }} state=directory
-    with_items:
-      - /var/lib/kubernetes
-      - /var/lib/kubelet
-      - /etc/kubernetes
+  # - name: make directory for Kubernetes
+  #   file: path={{ item }} state=directory
+  #   with_items:
+  #     - /var/lib/kubernetes
+  #     - /var/lib/kubelet
+  #     - /etc/kubernetes
 
   - name: upload certificates
     copy:
@@ -25,33 +25,33 @@
       - kubernetes.pem
       - kubernetes-key.pem
 
-  - name: upload kubelet.service systemd unit
-    copy:
-      src: ../templates/kubelet.service
-      dest: /etc/systemd/system
-      owner: root
-      group: root
-      mode: 0600
+  # - name: upload kubelet.service systemd unit
+  #   copy:
+  #     src: ../templates/kubelet.service
+  #     dest: /etc/systemd/system
+  #     owner: root
+  #     group: root
+  #     mode: 0600
 
-  - name: upload kube-proxy.service systemd unit
-    copy:
-      src: ../templates/kube-proxy.service
-      dest: /etc/systemd/system
-      owner: root
-      group: root
-      mode: 0600
+  # - name: upload kube-proxy.service systemd unit
+  #   copy:
+  #     src: ../templates/kube-proxy.service
+  #     dest: /etc/systemd/system
+  #     owner: root
+  #     group: root
+  #     mode: 0600
 
-  - name: upload start-kubelet.sh script
+  - name: upload kubelet.sh script
     copy:
-      src: ../output/start-kubelet.sh
+      src: ../output/kubelet.sh
       dest: /usr/local/sbin
       owner: root
       group: root
       mode: 0700
 
-  - name: upload start-kube-proxy.sh script
+  - name: upload kube-proxy.sh script
     copy:
-      src: ../output/start-kube-proxy.sh
+      src: ../output/kube-proxy.sh
       dest: /usr/local/sbin
       owner: root
       group: root

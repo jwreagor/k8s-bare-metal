@@ -3,7 +3,7 @@ Description=Kubernetes Controller Manager
 Documentation=https://github.com/kubernetes/kubernetes
 
 [Service]
-ExecStart=/usr/local/sbin/start-kube-controller-manager.sh
+ExecStart=/usr/local/sbin/kube-controller-manager.sh
 Restart=on-failure
 RestartSec=5
 
