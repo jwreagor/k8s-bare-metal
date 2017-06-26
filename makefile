@@ -19,8 +19,17 @@ TEMPLATES ?= kvm-worker.json lx-bastion.json lx-controller.json
 
 default: help
 
-clean: ## Clear out generated/compiled templates and artifacts.
+clean:: ## Clear out generated/compiled templates and artifacts.
 	rm -f *.json cert/*.pem cert/*.csr cert/kubernetes-csr.json
+
+clean/controller:: ## Clear out controller image
+	@triton img rm -f k8s-controller-lx-16.04
+
+clean/worker:: ## Clear out worker image
+	@triton img rm -f k8s-worker-kvm-16.04
+
+clean/bastion:: ## Clear out bastion image
+	@triton img rm -f k8s-bastion-lx-16.04
 
 # Packer Targets
 
@@ -106,6 +115,9 @@ deps/packer:: ## Install packer(1)
 
 deps/cfgt:: ## Install cfgt(1)
 	go get -u github.com/sean-/cfgt
+
+deps/ansible:: ## Installs ansible(1)
+	brew install ansible
 
 env:: ## Show local environment variables
 	@env | egrep -i '(SDC|Triton|Manta|BASTION|PRIVATE|PUBLIC)' | sort

@@ -1,16 +1,19 @@
 # k8s-bare-metal
 
-Guide for running Kubernetes on [Triton][triton] using Packer and Terraform
-running on a [Joyent Triton][triton] bare metal container and KVM instance.
+Guide for building Kubernetes on [Triton][triton] using Packer, Terraform and
+Ansible. Automates the installation of a bare metal control plane and KVM
+instance worker nodes all running on [Joyent's Triton][triton].
 
 The initial goal of this guide is to build out the following instances akin to
-[the Hard Way post](https://www.joyent.com/blog/kubernetes-the-hard-way) but with extended Triton exclusive features.
+[the Hard Way post][hard] but with extended Triton exclusive features.
 
 - 1x `bastion` node (jump box) for tunneling into our private network.
 - 1x `controller` infrastructure container running `kube-apiserver`,
   `kube-controller-manager`, and `kube-scheduler`.
-- 1x `worker` running KVM for `kubelet`, `kube-proxy`, and `docker`.
+- 3x `worker` running KVM for `kubelet`, `kube-proxy`, and `docker`.
 - `etcd` cluster provided by the Autopilot Pattern
+
+**Note**: Pods/containers run on KVM instances running Docker, for the moment.
 
 ## Dependencies
 
@@ -18,18 +21,10 @@ The initial goal of this guide is to build out the following instances akin to
 - Install [Terraform][terraform] 0.9.8.
 - Install [Ansible][ansible] 2.3.0.0.
 - Install the [Triton CLI][triton-cli].
+- Install the [Triton Docker CLI][triton-docker].
 - Certificates are created via CloudFlare's PKI toolkit [`cfssl`][cfssl].
 - I use [`jq`][jq] below for parsing JSON.
 - I also use [`direnv`][direnv] for storing environment variables.
-
-[packer]: https://www.packer.io/
-[terraform]: https://www.terraform.io/
-[ansible]: https://www.ansible.com/
-[triton-cli]: https://docs.joyent.com/public-cloud/api-access/cloudapi
-[cfssl]: https://cfssl.org/
-[jq]: https://stedolan.github.io/jq/
-[direnv]: https://direnv.net/
-[triton]: https://www.joyent.com/triton/compute
 
 ### Note on Packer
 
@@ -39,7 +34,7 @@ Packer templates in this project require JSON5 support in `packer(1)` or the
 - Usage with unpatched packer: `cfgt -i kvm-worker.json5 | packer build -`
 - Usage with patched packer: `packer build kvm-worker.json5`
 
-[packer w/ JSON5 support](https://github.com/sean-/packer/tree/f-json5)
+[Packer w/ JSON5 support][packer-json5]
 cfgt: `go get -u github.com/sean-/cfgt`
 
 ## Setup your Triton CLI tool
@@ -160,3 +155,15 @@ not hooked up yet.
 ## License
 
 Mozilla Public License Version 2.0
+
+[packer]: https://www.packer.io/
+[terraform]: https://www.terraform.io/
+[ansible]: https://www.ansible.com/
+[triton-cli]: https://docs.joyent.com/public-cloud/api-access/cloudapi
+[triton-docker]: https://github.com/joyent/triton-docker-cli
+[cfssl]: https://cfssl.org/
+[jq]: https://stedolan.github.io/jq/
+[direnv]: https://direnv.net/
+[triton]: https://www.joyent.com/triton/compute
+[hard]: https://www.joyent.com/blog/kubernetes-the-hard-way
+[packer-json5]: https://github.com/sean-/packer/tree/f-json5
