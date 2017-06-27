@@ -20,7 +20,7 @@ TEMPLATES ?= kvm-worker.json lx-bastion.json lx-controller.json
 default: help
 
 clean:: ## Clear out generated/compiled templates and artifacts.
-	rm -f *.json cert/*.pem cert/*.csr cert/kubernetes-csr.json
+	rm -f *.json cert/*.pem cert/*.csr cert/kubernetes-csr.json output/*
 
 clean/controller:: ## Clear out controller image
 	@triton img rm -f k8s-controller-lx-16.04
@@ -70,13 +70,16 @@ destroy:
 
 # Ansible Targets (requires applying Terraform first)
 
-config: config/controllers config/workers ## Run Ansible over remote hosts through our bastion instance
+config: config/controllers config/workers config/bastion ## Run Ansible over remote hosts through our bastion instance
 
 config/workers:: ## Build out worker nodes
 	ansible-playbook ansible/workers.yml
 
 config/controllers:: ## Build out controller nodes
 	ansible-playbook ansible/controllers.yml
+
+config/bastion:: ## Build out the bastion node
+	ansible-playbook ansible/bastion.yml
 
 config/check:: ## Build out controller nodes
 	ansible -u root all -a "hostname"
