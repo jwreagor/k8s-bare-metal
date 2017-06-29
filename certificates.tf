@@ -6,6 +6,7 @@ data "template_file" "certificates" {
   ]
 
   vars {
+    bastion_host = "${var.bastion_host}"
     controller_ips = "${join(",", formatlist("\"%s\"", triton_machine.controller.*.primaryip))}"
     worker_ips = "${join(",", formatlist("\"%s\"", triton_machine.worker.*.primaryip))}"
     etcd_ips = "\"${var.etcd1_ip}\",\"${var.etcd2_ip}\",\"${var.etcd3_ip}\""

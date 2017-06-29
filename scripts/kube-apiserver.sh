@@ -16,7 +16,7 @@ exec /usr/local/bin/kube-apiserver \
   --insecure-bind-address=0.0.0.0 \
   --kubelet-certificate-authority=/var/lib/kubernetes/ca.pem \
   --service-account-key-file=/var/lib/kubernetes/kubernetes-key.pem \
-  --service-cluster-ip-range=10.32.0.0/24 \
+  --service-cluster-ip-range=192.168.0.0/24 \
   --service-node-port-range=30000-32767 \
   --tls-cert-file=/var/lib/kubernetes/kubernetes.pem \
   --tls-private-key-file=/var/lib/kubernetes/kubernetes-key.pem \

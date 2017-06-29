@@ -4,6 +4,9 @@
     ${etcd_ips},
     ${worker_ips},
     ${controller_ips},
+    "${bastion_host}",
+    "fubarnetes",
+    "10.32.0.1",
     "127.0.0.1"
   ],
   "key": {

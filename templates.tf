@@ -124,6 +124,26 @@ resource "local_file" "ssh_config" {
   filename  = "${path.module}/output/ssh.config"
 }
 
+// setup-kubectl.sh ------------------------------------------------------------
+
+data "template_file" "setup_kubectl" {
+  template   = "${file("${path.module}/scripts/setup-kubectl.sh")}"
+  depends_on = [
+    "triton_machine.controller",
+  ]
+
+  vars {
+    cluster_name = "${var.cluster_name}"
+    secret_token = "${var.secret_token}"
+    master_ip    = "${triton_machine.controller.0.primaryip}"
+  }
+}
+
+resource "local_file" "setup_kubectl" {
+  content  = "${data.template_file.setup_kubectl.rendered}"
+  filename = "${path.module}/output/setup-kubectl.sh"
+}
+
 // ansible-inventory -----------------------------------------------------------
 
 data "template_file" "controller_ansible" {

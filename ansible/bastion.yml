@@ -1,0 +1,27 @@
+---
+- hosts: bastion
+  become_user: root
+  become: true
+  remote_user: root
+  tasks:
+
+  - name: make directory for Kubernetes
+    file: path={{ item }} state=directory
+    with_items:
+      - /var/lib/kubernetes
+
+  - name: upload ca.pem
+    copy:
+      src: ../output/ca.pem
+      dest: /var/lib/kubernetes
+      mode: 0600
+
+  - name: upload setup-kubectl.sh
+    copy:
+      src: ../output/setup-kubectl.sh
+      dest: /root
+      mode: 0500
+
+  - name: execute setup-kubectl.sh
+    command: /root/setup-kubectl.sh admin
+

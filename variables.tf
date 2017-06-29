@@ -14,10 +14,15 @@ variable triton_key_path {
   description = "Path to the SSH private key used by Triton"
 }
 
+variable cluster_name {
+  description = "Name your kubernetes cluster, setup through kubectl"
+  default = "kubernetes-the-hard-way"
+}
+
 # head /dev/urandom | base32 | head -c 8
 variable secret_token {
   description = "Secret token used by Kubernetes for securing the API server"
-  default = "UWZ6OBSL"
+  default = "ch4ngem3"
 }
 
 variable bastion_host {
